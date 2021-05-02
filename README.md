@@ -9,3 +9,13 @@ This 'solver' is expected to require simulated games to find optimal strategies.
     2. Use set operations - inexpensive and fitting for the gameplay
 2. Attempt to use class structures that easy to grasp
 3. Attempt to use polymorphism, and small set of functions. Following ['Simple Made Easy'](https://www.infoq.com/presentations/Simple-Made-Easy) talk
+
+## TODO
+
+* [ ] Add functionality for a player to place a cube
+    * [ ] Likely needs a lookup for gameclues
+    * [ ] Update global gamestate
+* [ ] Add functionality for a player to ask player's knowledge on a tile
+    * [ ] Place subsequent disk, or cubes
+* [ ] Add functionality for a player to guess monster location
+    * [ ] Place subsequent disks and/or cube
