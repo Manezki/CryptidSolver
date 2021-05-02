@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Iterable
-from structure import Structure
-from tile import _BiomeTile, MapTile
+from cryptidsolver.structure import Structure
+from cryptidsolver.tile import _BiomeTile, MapTile
 
 
 class MapPiece(Enum):

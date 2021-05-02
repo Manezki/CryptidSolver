@@ -1,8 +1,8 @@
 import unittest
-import clue
-from game import Game
-from player import Player
-from structure import Structure
+import cryptidsolver.constant.clues as clue
+from cryptidsolver.game import Game
+from cryptidsolver.player import Player
+from cryptidsolver.structure import Structure
 
 class TestClueAcceptsTiles(unittest.TestCase):
 

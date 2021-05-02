@@ -1,4 +1,4 @@
-from clue import CLUE_COLLECTION, THREE_FROM_BLACK
+from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
 
 class Player():
     def __init__(self, color, clue=None, teamname=None, inverse_clues=False):

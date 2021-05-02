@@ -1,6 +1,5 @@
-from tile import _BiomeTile, MapTile
 import unittest
-
+from cryptidsolver.tile import _BiomeTile, MapTile
 
 class TestMapTile(unittest.TestCase):
 

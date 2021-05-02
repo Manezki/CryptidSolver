@@ -1,5 +1,5 @@
-from gamemap import Map
 import itertools
+from cryptidsolver.gamemap import Map
 
 class Game():
     def __init__(self, map_descriptor, ordered_players, structures):

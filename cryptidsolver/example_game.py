@@ -1,7 +1,7 @@
-from game import Game
-from player import Player
-from gamemap import Structure
-import clue
+from cryptidsolver.game import Game
+from cryptidsolver.player import Player
+from cryptidsolver.gamemap import Structure
+import cryptidsolver.clue as clue
 
 ME_1 = Player("red", clue.ONE_FROM_ANIMAL, teamname="alpha")
 ME_2 = Player("orange", clue.DESERT_OR_SWAMP, teamname="beta")
@@ -18,14 +18,6 @@ BLUE_SHACK = Structure("blue", "shack", 7, 4)
 game = Game(["3N", "1S", "5S", "4S", "2N", "6S"], [ME_1, EVA_1, ME_2, EVA_2],
             [GREEN_STONE, GREEN_SHACK, WHITE_STONE, WHITE_SHACK, BLUE_STONE, BLUE_SHACK])
 
-# TODO Add the structure ^^ to the map
-
-# game.map.add_structure(8, 0, "blue", "stone")
-# game.map.add_structure(6, 3, "blue", "shack")
-# game.map.add_structure(11, 2, "green", "stone")
-# game.map.add_structure(6, 3, "green", "shack")
-# game.map.add_structure(7, 5, "white", "stone")
-# game.map.add_structure(9, 7, "white", "shack")
 print(len(game.possible_clues()))
 for clue in game.possible_clues():
     print(clue)

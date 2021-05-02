@@ -1,5 +1,5 @@
 import unittest
-from structure import Structure
+from cryptidsolver.structure import Structure
 
 
 class TestCreateStructure(unittest.TestCase):
