@@ -6,4 +6,7 @@ setup(name="cryptidsolver",
       install_requires=[],
       test_requires=["tox", "pytest"],
       packages=find_packages(where=".", exclude="./tests"),
+      scripts=[
+            "./interactive_solver.py"
+      ],
       zip_safe=False)
