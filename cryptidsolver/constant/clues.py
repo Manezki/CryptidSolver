@@ -528,6 +528,9 @@ __CLUE_LOOKUP = {
 
 def by_booklet_entry(alphabet: str, number: int) -> Clue:
 
+    # TODO Refactor: Move to Clue classmethod
+    # TODO QOL: Accept alphabet letters
+
     # alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
     # alphabet = alphabet_lookup.get(alphabet.lower(), alphabet.lower())
 
