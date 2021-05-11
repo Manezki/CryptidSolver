@@ -32,7 +32,14 @@ class Game():
             Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
         """
 
-        # TODO Check that the tile does not contain cube nor disk
+        # Cubes cannot be placed on tiles which already have a cube
+        map_objects = set()
+        for player in self.players:
+            for tile in player.cubes:
+                map_objects.add(tile)
+
+        if (x, y) in map_objects:
+            raise ValueError("Cubes cannot be placed on tiles with existing cubes")
 
         acting_player = self.players[self.gametick % len(self.players)]
         acting_player.cubes.append((x, y))
@@ -55,8 +62,6 @@ class Game():
         Returns:
             Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
         """
-
-        # TODO Check that the tile does not contain cube
 
         acting_player = self.players[self.gametick % len(self.players)]
         acting_player.disks.append((x, y))

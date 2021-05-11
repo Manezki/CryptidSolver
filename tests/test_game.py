@@ -9,18 +9,17 @@ MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
 STRUCTURES = [Structure("green", "stone", 12, 2), Structure("green", "shack", 7, 3), Structure("white", "stone", 8, 6),
               Structure("white", "shack", 10, 8), Structure("blue", "stone", 9, 1), Structure("blue", "shack", 7, 4)]
 
-PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-PLAYER_2 = Player("cyan", None, teamname="beta")
-PLAYER_3 = Player("purple", None, teamname="epsilon")
-
-PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
-
-
 class TestCubePlacement(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        # Redefine for every test as state persists otherwise
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
 
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
 
     def test_cube_added_to_player(self) -> None:
 
@@ -32,7 +31,7 @@ class TestCubePlacement(unittest.TestCase):
         self.assertEqual(len(self.game.players[0].cubes), before_placement + 1)
 
 
-    def test_gametick_advanced(self) -> None:
+    def test_gametick_advances(self) -> None:
 
         before_placement = self.game.gametick
 
@@ -41,11 +40,24 @@ class TestCubePlacement(unittest.TestCase):
         self.assertEqual(self.game.gametick, before_placement + 1)
 
 
+    def test_rejects_placement_when_cube_present(self) -> None:
+
+        self.game.place_cube(1, 1)
+
+        with self.assertRaises(ValueError, msg="Cubes cannot be placed on tiles with cubes"):
+            self.game.place_cube(1, 1)
+
+
 class TestDiskPlacement(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
 
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
 
     def test_disk_added_to_player(self) -> None:
 
@@ -56,7 +68,7 @@ class TestDiskPlacement(unittest.TestCase):
         self.assertEqual(len(self.game.players[0].disks), before_placement + 1)
 
 
-    def test_gametick_advanced(self) -> None:
+    def test_gametick_advances(self) -> None:
 
         before_placement = self.game.gametick
 
