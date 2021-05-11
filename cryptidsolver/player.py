@@ -1,7 +1,8 @@
 from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
+from cryptidsolver.clue import Clue
 
 class Player():
-    def __init__(self, color, clue=None, teamname=None, inverse_clues=False):
+    def __init__(self, color: str, clue: Clue = None, teamname: str = None, inverse_clues: bool = False) -> "Player":
         self.color = color
         self.teamname = teamname
         self.clue = clue

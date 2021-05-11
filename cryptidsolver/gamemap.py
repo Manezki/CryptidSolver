@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Iterable
+from typing import Iterable, List
 from cryptidsolver.structure import Structure
 from cryptidsolver.tile import _BiomeTile, MapTile
 
@@ -49,7 +49,7 @@ class MapPiece(Enum):
     
 
 class Map():
-    def __init__(self, map_description, structures: Iterable[Structure]):
+    def __init__(self, map_description: List[str], structures: Iterable[Structure]) -> "Map":
         """
         Describe the map using the map pieces ({number}{south/north})
 
@@ -68,7 +68,7 @@ class Map():
 
 
     @staticmethod
-    def neighbouring_coordinates(x, y):
+    def neighbouring_coordinates(x: int, y: int) -> set:
         neighbours = set()
 
         for row in [x-1, x , x+1]:
@@ -86,7 +86,7 @@ class Map():
         return neighbours
 
 
-    def tiles_on_distance(self, x, y, d):
+    def tiles_on_distance(self, x: int, y: int, d: int) -> set:
         
         neighbours = set()
         neighbours.add(self.__getitem__([x, y]))
@@ -103,7 +103,7 @@ class Map():
         return neighbours
 
 
-    def _reverse_map_piece(self, map_piece) -> list:
+    def _reverse_map_piece(self, map_piece: MapPiece) -> list:
         
         reversed = []
         
@@ -118,7 +118,7 @@ class Map():
 
         return reversed
 
-    def _generate_terrain_map(self, description, structures):
+    def _generate_terrain_map(self, description: List[str], structures: List[Structure]) -> List[List[MapTile]]:
         """
         Form a map from map pieces.
 
@@ -165,13 +165,13 @@ class Map():
         return game_map
 
 
-    def __iter__(self):
+    def __iter__(self) -> MapTile:
         for col in self.map:
             for tile in col:
                 yield tile
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         stringify = ""
         for row in range(len(self.map[0])):
             for col in range(len(self.map)):
@@ -181,7 +181,7 @@ class Map():
         return stringify
 
 
-    def __getitem__(self, coordinates):
+    def __getitem__(self, coordinates) -> MapTile:
 
         assert len(coordinates) == 2, "Two coordinates required to fetch a tile"
         assert isinstance(coordinates[0], int), "First coordinate has to be an integer"

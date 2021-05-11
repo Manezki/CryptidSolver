@@ -1,19 +1,22 @@
+from cryptidsolver.structure import Structure
+
+
 class _BiomeTile():
 
-    def __init__(self, biome, animal=None):
+    def __init__(self, biome: str, animal: str = None) -> "_BiomeTile":
         self.biome = biome
         self.animal = animal
 
 
-    def has_bear(self):
+    def has_bear(self) -> bool:
         return self.animal == "bear"
     
 
-    def has_cougar(self):
+    def has_cougar(self) -> bool:
         return self.animal == "cougar"
 
     
-    def has_animal(self):
+    def has_animal(self) -> bool:
         return self.animal is not None
     
     
@@ -23,7 +26,7 @@ class _BiomeTile():
 
 class MapTile(_BiomeTile):
 
-    def __init__(self, biome, x, y, animal=None, structure=None):
+    def __init__(self, biome: str, x: int, y: int, animal: str = None, structure: Structure = None) -> "MapTile":
         assert isinstance(x, int)
         assert isinstance(y, int)
         super().__init__(biome, animal)
@@ -33,29 +36,29 @@ class MapTile(_BiomeTile):
 
 
     @classmethod
-    def _from_BiomeTile(cls, biometile, x, y, structure=None):
+    def _from_BiomeTile(cls, biometile: _BiomeTile, x: int, y: int, structure: Structure = None):
         return cls(biometile.biome, x, y, animal = biometile.animal, structure = structure)
 
 
-    def has_shack(self):
+    def has_shack(self) -> bool:
         if self.structure is None:
             return False
         else:
             return self.structure.is_shack()
     
 
-    def has_stone(self):
+    def has_stone(self) -> bool:
         if self.structure is None:
             return False
         else:
             return self.structure.is_stone()
 
     
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.x, self.y))
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
 
         coordinates = (self.x, self.y)
 

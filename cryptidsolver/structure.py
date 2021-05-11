@@ -1,6 +1,6 @@
 class Structure():
 
-    def __init__(self, color:str, shape:str, x:int, y:int):
+    def __init__(self, color:str, shape:str, x:int, y:int) -> "Structure":
 
         if x < 1 or y < 1:
             raise ValueError("Coordinates have to be strictly positive")
@@ -21,29 +21,29 @@ class Structure():
         self.y = y
 
 
-    def is_blue(self):
+    def is_blue(self) -> bool:
         return self.color.lower() == "blue"
 
 
-    def is_green(self):
+    def is_green(self) -> bool:
         return self.color.lower() == "green"
     
     
-    def is_white(self):
+    def is_white(self) -> bool:
         return self.color.lower() == "white"
 
 
-    def is_black(self):
+    def is_black(self) -> bool:
         return self.color.lower() == "black"
 
 
-    def is_shack(self):
+    def is_shack(self) -> bool:
         return self.shape.lower() == "shack"
 
 
-    def is_stone(self):
+    def is_stone(self) -> bool:
         return self.shape.lower() == "stone"
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return str("{} {}".format(self.color.capitalize(), self.shape.capitalize()))

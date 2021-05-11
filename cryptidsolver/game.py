@@ -1,8 +1,12 @@
 import itertools
+from typing import List
+
 from cryptidsolver.gamemap import Map
+from cryptidsolver.player import Player
+from cryptidsolver.structure import Structure
 
 class Game():
-    def __init__(self, map_descriptor, ordered_players, structures):
+    def __init__(self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]) -> "Game":
         self.players = ordered_players
         self.map = Map(map_descriptor, structures)
 
@@ -11,7 +15,7 @@ class Game():
         self.__reduce_possible_tiles_by_clues()
 
     
-    def __reduce_possible_tiles_by_clues(self):
+    def __reduce_possible_tiles_by_clues(self) -> None:
         for player in self.players:
             if player.clue is not None:
                 for tile in self.possible_tiles.copy():
@@ -28,7 +32,7 @@ class Game():
                                 pass
     
 
-    def possible_clues(self):
+    def possible_clues(self) -> set:
         clue_combinations = itertools.product(*[p.possible_clues for p in self.players])
         
         possible_combinations = set()

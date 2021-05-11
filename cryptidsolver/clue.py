@@ -1,5 +1,9 @@
+from cryptidsolver.tile import MapTile
+from cryptidsolver.gamemap import Map
+from typing import Set
+
 class Clue():
-    def __init__(self, distance, distance_from, clue_type="biome"):
+    def __init__(self, distance: int, distance_from: Set[str], clue_type: str = "biome") -> "Clue":
         self.distance = distance
         self.distance_from = set(distance_from)
         self.clue_type = clue_type
@@ -7,11 +11,11 @@ class Clue():
         self.__accepted_tiles = None
 
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return "Distance {} from {}".format(self.distance, self.distance_from)
 
 
-    def accepted_tiles(self, gamemap) -> set:
+    def accepted_tiles(self, gamemap: Map) -> set:
 
         if self.__accepted_tiles is not None:
             return self.__accepted_tiles.copy()
@@ -33,7 +37,7 @@ class Clue():
         return accepted_tiles
 
 
-    def accepts_tile(self, tile):
+    def accepts_tile(self, tile: MapTile) -> bool:
         if self.clue_type == "biome":
             if tile.biome in self.distance_from:
                 return True
