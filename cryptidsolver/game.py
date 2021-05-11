@@ -1,18 +1,70 @@
 import itertools
-from typing import List
+from typing import List, Tuple
 
 from cryptidsolver.gamemap import Map
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
+from cryptidsolver.tile import MapTile
+
 
 class Game():
     def __init__(self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]) -> "Game":
         self.players = ordered_players
         self.map = Map(map_descriptor, structures)
 
+        self.gametick = 0
+
         self.possible_tiles = set(self.map)
 
         self.__reduce_possible_tiles_by_clues()
+
+
+    def place_cube(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
+        """
+        Place a cube for the acting player.
+
+        Args:
+            x - int : x coordinate for the cube. In range 1 ... 12
+            y - int : y coordinate for the cube. In range 1 ... 9
+            advance_tick - bool : Advance gametick. This should be false when players place a cube after unsuccesful question.
+        
+        Returns:
+            Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
+        """
+
+        # TODO Check that the tile does not contain cube nor disk
+
+        acting_player = self.players[self.gametick % len(self.players)]
+        acting_player.cubes.append((x, y))
+
+        if advance_tick:
+            self.gametick += 1
+
+        return (acting_player, self.map[x, y])
+
+
+    def place_disk(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
+        """
+        Place a disk for the acting player.
+
+        Args:
+            x - int : x coordinate for the disk. In range 1 ... 12
+            y - int : y coordinate for the disk. In range 1 ... 9
+            advance_tick - bool : Advance gametick. This should be false when players respond to monster location guess.
+
+        Returns:
+            Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
+        """
+
+        # TODO Check that the tile does not contain cube
+
+        acting_player = self.players[self.gametick % len(self.players)]
+        acting_player.disks.append((x, y))
+
+        if advance_tick:
+            self.gametick += 1
+
+        return (acting_player, self.map[x, y])
 
     
     def __reduce_possible_tiles_by_clues(self) -> None:

@@ -28,6 +28,7 @@ def parse_structure(stringified: str) -> Structure:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Interactive Cryptid solver")
     parser.add_argument("--map", type=str, nargs=6, required=True, help="Map description. Columnar from top-left as '(Mappiece number)(S/N)'")
+    # TODO Add an identifier for acting players
     parser.add_argument("--players", type=str, nargs="+", required=True, help="Ordered players as '(color)_(clue alphabet)(clue number)'")
     parser.add_argument("--structures", type=str, nargs="+", required=True, help="Structures as '(color)_([SS/AS])_(x),(y)'")
     args = parser.parse_args()
@@ -42,8 +43,24 @@ if __name__ == "__main__":
 
         cmd = input().lower().strip()
 
-        if cmd.startswith("place"):
-            raise NotImplementedError
+        if cmd.startswith("place") and len(cmd.split(" ")) == 4:
+
+            try:
+                (_, mapObject, x, y) = cmd.split(" ")
+                (x, y) = (int(x), (int(y)))
+
+                if mapObject == "c":
+                    action = game.place_cube(x, y)
+                    print("{} placed cube on {}".format(action[0], action[1]))
+                elif mapObject == "d":
+                    action = game.place_disk(x, y)
+                    print("{} placed disk on {}".format(action[0], action[1]))
+                else:
+                    raise ValueError
+
+            except ValueError:
+                pass
+
         elif cmd == "possible clues":
             for player in game.players:
                 print("{}'s possible clues".format(player))
