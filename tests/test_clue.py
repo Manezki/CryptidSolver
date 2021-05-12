@@ -1,14 +1,21 @@
 import unittest
-import cryptidsolver.constant.clues as clue
+from copy import deepcopy
+
+from cryptidsolver.constant import clues
 from cryptidsolver.game import Game
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 
-class TestClueAcceptsTiles(unittest.TestCase):
+MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
+STRUCTURES = [Structure("green", "stone", 12, 2), Structure("green", "shack", 7, 3), Structure("white", "stone", 8, 6),
+              Structure("white", "shack", 10, 8), Structure("blue", "stone", 9, 1), Structure("blue", "shack", 7, 4)]
+
+
+class TestAcceptedTiles(unittest.TestCase):
 
     def setUp(self) -> None:
         self.game = Game(["6N", "5S", "2N", "3N", "4N", "1S"], 
-                         [Player("Red", clue=clue.FOREST_OR_MOUNTAIN),
+                         [Player("Red", clue=clues.FOREST_OR_MOUNTAIN),
                           Player("Green"), Player("Brown"), Player("Purple")],
                          [Structure("Blue", "Shack", x=1, y=7), Structure("Blue", "Stone", x=8, y=3),
                           Structure("White", "Stone", x=2, y=2), Structure("White", "Shack", x=11, y=7),
@@ -26,6 +33,22 @@ class TestClueAcceptsTiles(unittest.TestCase):
 
         for tile in accepted_tiles:
             self.assertIn((tile.x, tile.y), self.forest_or_mountain_coordinates, msg="'{} @ x{} y{}' of accepted tiles does not have coordinates matching to hand-checked tiles".format(tile, tile.x, tile.y))
+
+
+    def test_cougar_clue_accepts_tile_next_to_cougar_zone(self) -> None:
+
+        # Encountered during manual testing
+
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
+
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+
+        # Deepcopy necessary in order not to carry over state to other tests
+        self.assertIn(game.map[1, 1], deepcopy(clues.TWO_FROM_COUGAR).accepted_tiles(game.map), msg="2 from cougar should accept tile next to cougar zone")
 
 
 if __name__ == "__main__":

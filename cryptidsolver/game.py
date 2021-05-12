@@ -81,7 +81,7 @@ class Game():
                     distanced_tiles = self.map.tiles_on_distance(x, y, player.clue.distance)
                     
                     for clued_distance in distanced_tiles:
-                        if not player.clue.accepts_tile(clued_distance):
+                        if clued_distance not in player.clue.accepted_tiles(self.map):
                             try:
                                 self.possible_tiles.remove(clued_distance)
                             except KeyError:

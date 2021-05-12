@@ -31,7 +31,7 @@ class Clue():
             distanced_tiles = gamemap.tiles_on_distance(x, y, self.distance)
 
             for clued_distance in distanced_tiles:
-                if self.accepts_tile(clued_distance):
+                if self.__tile_confers_to_clue(clued_distance):
                     accepted_tiles.add(tile)
 
         assert len(accepted_tiles) != 0, "Should accept tiles"
@@ -40,7 +40,8 @@ class Clue():
         return accepted_tiles
 
 
-    def accepts_tile(self, tile: MapTile) -> bool:
+    def __tile_confers_to_clue(self, tile: MapTile) -> bool:
+
         if self.clue_type == "biome":
             if tile.biome in self.distance_from:
                 return True
