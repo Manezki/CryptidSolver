@@ -8,6 +8,9 @@ class Clue():
         self.distance_from = set(distance_from)
         self.clue_type = clue_type
 
+        # BUG Clue-hashes sometimes become incomparable even after deepcopy.
+        # This might be because the state in self.__accepted_tiles changes when tile interaction is tested.
+        # See test_player.py/test_possible_clues_defaults_to_return_all_clues for a workaround
         self.__accepted_tiles = None
 
 

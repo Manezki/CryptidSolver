@@ -1,7 +1,7 @@
 from typing import Set
-from copy import copy
+from copy import deepcopy
 
-from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
+from cryptidsolver.constant.clues import CLUE_COLLECTION
 from cryptidsolver.clue import Clue
 
 class Player():
@@ -16,11 +16,15 @@ class Player():
 
         possible_clues = set()
 
+        if self.clue is not None:
+            possible_clues.add(deepcopy(self.clue))
+            return possible_clues
+
         for clue in CLUE_COLLECTION:
             # Clue is possible only if it accepts all disk locations and refuses all cube locations
             if all([clue.accepts_tile(disk) for disk in self.disks]):
                 if all([~clue.accepts_tile(cube) for cube in self.cubes]):
-                    possible_clues.add(copy(clue))
+                    possible_clues.add(deepcopy(clue))
 
         return possible_clues
 
