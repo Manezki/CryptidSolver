@@ -7,11 +7,20 @@ from cryptidsolver.game import Game
 
 def parse_player(stringified: str) -> Player:
     alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
-    
+
+    if stringified.startswith("@"):
+        acting_player = True
+        stringified = stringified[1:]
+    else:
+        acting_player = False
+
     color, booklet = stringified.split("_")
     (booklet_alpha, booklet_num) = (alphabet_lookup[booklet[0].lower()], int(booklet[1:]))
     
-    return Player(color, by_booklet_entry(booklet_alpha, booklet_num))
+    if acting_player:
+        return Player(color, by_booklet_entry(booklet_alpha, booklet_num))
+    else:
+        return Player(color, clue=None)
 
 
 def parse_structure(stringified: str) -> Structure:
@@ -28,8 +37,7 @@ def parse_structure(stringified: str) -> Structure:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Interactive Cryptid solver")
     parser.add_argument("--map", type=str, nargs=6, required=True, help="Map description. Columnar from top-left as '(Mappiece number)(S/N)'")
-    # TODO Add an identifier for acting players
-    parser.add_argument("--players", type=str, nargs="+", required=True, help="Ordered players as '(color)_(clue alphabet)(clue number)'")
+    parser.add_argument("--players", type=str, nargs="+", required=True, help="Ordered players as '[@](color)_(clue alphabet)(clue number)' with @ for acting player")
     parser.add_argument("--structures", type=str, nargs="+", required=True, help="Structures as '(color)_([SS/AS])_(x),(y)'")
     args = parser.parse_args()
 

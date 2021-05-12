@@ -6,7 +6,7 @@
         {
             "label": "Start interactive solver",
             "type": "shell",
-            "command": "python interactive_solver.py --map 3N 1S 5S 4S 2N 6S --players red_a2 orange_b79 brown_e28 --structures g_as_7,3 b_as_7,4 w_ss_8,6 b_ss_9,1 w_ss_10,8 g_ss_12,2",
+            "command": "python interactive_solver.py --map 3N 1S 5S 4S 2N 6S --players @red_a2 orange_b79 brown_e28 --structures g_as_7,3 b_as_7,4 w_ss_8,6 b_ss_9,1 w_ss_10,8 g_ss_12,2",
             "group": {
                 "kind": "build",
                 "isDefault": true
