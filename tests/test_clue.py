@@ -48,8 +48,29 @@ class TestAcceptedTiles(unittest.TestCase):
 
         game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
 
-        # Deepcopy necessary in order not to carry over state to other tests
-        self.assertIn(game.map[1, 1], deepcopy(clues.TWO_FROM_COUGAR).accepted_tiles(game.map), msg="2 from cougar should accept tile next to cougar zone")
+        self.assertIn(game.map[1, 1], clues.TWO_FROM_COUGAR.accepted_tiles(game.map), msg="2 from cougar should accept tile next to cougar zone")
+
+
+    def test_repeated_calls_are_cached(self) -> None:
+
+        two_from_cougar = deepcopy(clues.TWO_FROM_COUGAR)
+
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
+
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+
+        _ = two_from_cougar.accepted_tiles(game.map)
+
+        before_call = two_from_cougar.accepted_tiles.cache_info()
+
+        _ = two_from_cougar.accepted_tiles(game.map)
+
+        after_call = two_from_cougar.accepted_tiles.cache_info()
+
+        self.assertEqual(after_call[0], before_call[0] + 1, msg="Number of cache hits should increase when called with same parameters")
 
 
 class TestHashing(unittest.TestCase):

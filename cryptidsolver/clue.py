@@ -1,17 +1,14 @@
+from typing import Set
+from functools import lru_cache
+
 from cryptidsolver.tile import MapTile
 from cryptidsolver.gamemap import Map
-from typing import Set
 
 class Clue():
     def __init__(self, distance: int, distance_from: Set[str], clue_type: str = "biome") -> "Clue":
         self.distance = distance
         self.distance_from = set(distance_from)
         self.clue_type = clue_type
-
-        # BUG Clue-hashes sometimes become incomparable even after deepcopy.
-        # This might be because the state in self.__accepted_tiles changes when tile interaction is tested.
-        # See test_player.py/test_possible_clues_defaults_to_return_all_clues for a workaround
-        self.__accepted_tiles = None
 
 
     def __repr__(self) -> str:
@@ -22,10 +19,8 @@ class Clue():
         return hash((self.distance, *self.distance_from, self.clue_type))
 
 
+    @lru_cache(maxsize=128)
     def accepted_tiles(self, gamemap: Map) -> set:
-
-        if self.__accepted_tiles is not None:
-            return self.__accepted_tiles.copy()
 
         accepted_tiles = set()
 
@@ -40,7 +35,6 @@ class Clue():
 
         assert len(accepted_tiles) != 0, "Should accept tiles"
 
-        self.__accepted_tiles = accepted_tiles.copy()
         return accepted_tiles
 
 
