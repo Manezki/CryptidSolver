@@ -1,6 +1,8 @@
 import copy
 from cryptidsolver.clue import Clue
 
+# TODO Is there a way to provide new Clue instance on every call
+
 FOREST_OR_DESERT = Clue(0, set(["F", "D"]))
 FOREST_OR_WATER = Clue(0, set(["F", "W"]))
 FOREST_OR_SWAMP = Clue(0, set(["F", "S"]))
@@ -28,6 +30,9 @@ THREE_FROM_BLUE = Clue(3, set(["blue"]), clue_type="structure")
 THREE_FROM_WHITE = Clue(3, set(["white"]), clue_type="structure")
 THREE_FROM_GREEN = Clue(3, set(["green"]), clue_type="structure")
 THREE_FROM_BLACK = Clue(3, set(["black"]), clue_type="structure")
+
+# TODO Refactor to contain normal clues and inverted clues differently
+# This will remove the need to remove THREE_FROM_BLACK in multiple locations
 
 CLUE_COLLECTION = set([
     FOREST_OR_DESERT, FOREST_OR_WATER, FOREST_OR_SWAMP, FOREST_OR_MOUNTAIN, DESERT_OR_WATER,

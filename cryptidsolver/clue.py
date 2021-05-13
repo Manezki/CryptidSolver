@@ -18,6 +18,10 @@ class Clue():
         return "Distance {} from {}".format(self.distance, self.distance_from)
 
 
+    def __hash__(self) -> int:
+        return hash((self.distance, *self.distance_from, self.clue_type))
+
+
     def accepted_tiles(self, gamemap: Map) -> set:
 
         if self.__accepted_tiles is not None:
