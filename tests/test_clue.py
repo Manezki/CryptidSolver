@@ -102,6 +102,32 @@ class TestHashing(unittest.TestCase):
         self.assertEqual(hash(a), hash(b), msg="Invoking class methods should not change the hash of a clue")
 
 
+    def test_set_unpacking_order_does_not_change_hash(self) -> None:
+
+        a = set(["bear", "cougar"])
+        b = set(["bear", "cougar"])
+
+        tupled_a = (*a, )
+        tupled_b = (*b, )
+
+        i = 0
+
+        while (tupled_a != tupled_b):
+
+            b = set(["bear", "cougar"])
+            tupled_b = (*b, )
+
+            i += 1
+
+            if i >= 1000:
+                self.fail("Did not find sets with different unpacking order")
+
+        clue_a = Clue(1, a, clue_type="animal")
+        clue_b = Clue(1, b, clue_type="animal")
+
+        self.assertEqual(hash(clue_a), hash(clue_b), msg="Clue hash should be independent of set-unpacking order")
+
+
 class TestEquality(unittest.TestCase):
 
     def test_different_instances_of_same_clues_evaluate_to_be_same(self) -> None:
@@ -130,6 +156,14 @@ class TestEquality(unittest.TestCase):
         _ = b.accepted_tiles(game.map)
 
         self.assertEqual(a, b, msg="Invoking class methods should not change equality comparison of Clue instance")
+
+
+    def test_set_creation_order_does_not_change_equality(self) -> None:
+
+        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        b = Clue(1, set(["cougar", "bear"]), clue_type="animal")
+
+        self.assertEqual(a, b, msg="Order of distance_from set should not change equality")
 
 
 if __name__ == "__main__":

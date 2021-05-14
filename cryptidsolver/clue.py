@@ -16,8 +16,7 @@ class Clue():
 
 
     def __hash__(self) -> int:
-        # BUG unpacking self.distance_from is unordered, and might result in different hashes
-        return hash((self.distance, *self.distance_from, self.clue_type))
+        return hash((self.distance, *sorted(list(self.distance_from)), self.clue_type))
 
 
     def __eq__(self, other) -> bool:
