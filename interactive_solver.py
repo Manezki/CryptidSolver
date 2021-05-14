@@ -24,10 +24,23 @@ def parse_player(stringified: str) -> Player:
 
 
 def parse_structure(stringified: str) -> Structure:
-    color_lookup = {"b": "blue", "g": "green", "w": "white", "b": "black"}
+
+    stringified = stringified.lower()
+
+    if not (stringified.startswith(("green", "white", "black", "blue"))):
+        raise ValueError("Structure parameter has to start by color definition")
+
+    if stringified.startswith(("green", "white", "black")):
+        color = stringified[:5]
+    else:
+        # Blue
+        color = stringified[:4]
+
     shape_lookup = {"ss": "stone", "as": "shack"}
 
-    (color, struct, loc) = (color_lookup[stringified[0].lower()], shape_lookup[stringified[2:4].lower()], stringified[5:])
+    offset = len(color)
+
+    (struct, loc) = (shape_lookup[stringified[offset + 1: offset + 3]], stringified[offset + 4:])
     (x, y) = loc.split(",")
     (x, y) = (int(x), int(y))
     
