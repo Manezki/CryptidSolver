@@ -19,6 +19,24 @@ class Game():
         self.__reduce_possible_tiles_by_clues()
 
 
+    def current_player(self) -> Player:
+        return self.players[self.gametick % len(self.players)]
+
+
+    def accepts_cube(self, x: int, y: int) -> bool:
+
+        # Cubes cannot be placed on tiles which already have a cube
+        map_objects = set()
+        for player in self.players:
+            for tile in player.cubes:
+                map_objects.add(tile)
+
+        if (x, y) in map_objects:
+            return False
+
+        return True
+
+
     def place_cube(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
         """
         Place a cube for the acting player.
@@ -32,16 +50,10 @@ class Game():
             Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
         """
 
-        # Cubes cannot be placed on tiles which already have a cube
-        map_objects = set()
-        for player in self.players:
-            for tile in player.cubes:
-                map_objects.add(tile)
-
-        if (x, y) in map_objects:
+        if not self.accepts_cube(x, y):
             raise ValueError("Cubes cannot be placed on tiles with existing cubes")
 
-        acting_player = self.players[self.gametick % len(self.players)]
+        acting_player = self.current_player()
         acting_player.cubes.append((x, y))
 
         if advance_tick:
@@ -63,7 +75,7 @@ class Game():
             Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
         """
 
-        acting_player = self.players[self.gametick % len(self.players)]
+        acting_player = self.current_player()
         acting_player.disks.append((x, y))
 
         if advance_tick:

@@ -48,6 +48,30 @@ class TestCubePlacement(unittest.TestCase):
             self.game.place_cube(1, 1)
 
 
+class TestAcceptsCube(unittest.TestCase):
+
+    def setUp(self) -> None:
+        # Redefine for every test as state persists otherwise
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
+
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+
+    def test_rejects_when_cube_present(self) -> None:
+
+        self.game.place_cube(1, 1)
+
+        self.assertFalse(self.game.accepts_cube(1, 1), msg="Cubes cannot be placed on tiles with other cubes")
+    
+
+    def test_accepts_when_no_cube_present(self) -> None:
+
+        self.assertTrue(self.game.accepts_cube(1, 1), msg="Cubes can be placed on tiles with other cubes")
+
+
 class TestDiskPlacement(unittest.TestCase):
 
     def setUp(self) -> None:
