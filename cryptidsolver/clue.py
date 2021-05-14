@@ -16,7 +16,16 @@ class Clue():
 
 
     def __hash__(self) -> int:
+        # BUG unpacking self.distance_from is unordered, and might result in different hashes
         return hash((self.distance, *self.distance_from, self.clue_type))
+
+
+    def __eq__(self, other) -> bool:
+
+        if not isinstance(other, Clue):
+            return False
+
+        return self.distance == other.distance and self.distance_from == other.distance_from and self.clue_type == other.clue_type
 
 
     @lru_cache(maxsize=128)

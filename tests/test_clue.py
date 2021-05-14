@@ -102,5 +102,35 @@ class TestHashing(unittest.TestCase):
         self.assertEqual(hash(a), hash(b), msg="Invoking class methods should not change the hash of a clue")
 
 
+class TestEquality(unittest.TestCase):
+
+    def test_different_instances_of_same_clues_evaluate_to_be_same(self) -> None:
+
+        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+
+        self.assertEqual(a, b, msg="Instances of same clue should evaluate to be equal")
+
+
+    def test_accepted_tiles_comparison(self) -> None:
+
+        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+
+        self.assertEqual(a, b, msg="Instances of same clue should evaluate to be equal")
+
+        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
+
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+
+        _ = b.accepted_tiles(game.map)
+
+        self.assertEqual(a, b, msg="Invoking class methods should not change equality comparison of Clue instance")
+
+
 if __name__ == "__main__":
     unittest.main()
