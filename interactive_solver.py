@@ -1,4 +1,7 @@
 import argparse
+import itertools
+import functools
+
 from cryptidsolver.constant.clues import by_booklet_entry
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
@@ -117,10 +120,51 @@ if __name__ == "__main__":
 
             print("Place cube on x:{} y:{} to reduce {} clues".format(minimum_reveal[0].x, minimum_reveal[0].y, minimum_reveal[1]))
 
+        elif cmd == "location prob":
+
+            potential_clues = []
+
+            for player in game.players:
+                if player.clue is not None:
+                    # Add known clues
+                    potential_clues.append(set([player.clue]))
+                else:
+                    potential_clues.append(player.possible_clues(game.map))
+
+            potential_tiles = {}
+            total = 0
+
+            for combination in itertools.product(*potential_clues):
+                possible_tiles = functools.reduce(lambda x, y: x & y.accepted_tiles(game.map), combination, set(game.map))
+                if len(possible_tiles) == 1:
+                    tile = possible_tiles.pop()
+                    total += 1
+
+                    if tile in potential_tiles:
+                        potential_tiles[tile] += 1
+                    else:
+                        potential_tiles[tile] = 1
+
+            potential_tiles = {k: v/total for k, v in potential_tiles.items()}
+
+            possible_locations = sorted(potential_tiles.items(), key=lambda x: x[1])
+
+            print("Location probabilities")
+            print("---------")
+            for location, probability in possible_locations:
+                print("Tile x:{} y:{} has probability of {}".format(location.x, location.y, probability))
+
+
+        elif cmd == "question":
+            # TODO return an informative question
+            raise NotImplementedError
+
+
         else:
-            print("""Did not quite catch that. Use the following commands:
+            print("""Did not quite catch that. Try one of the following commands:
             - place [c/d] x y : to place Cube or Disk
             - possible clues : to list out possible clues
-            - infer placement : to have a placement for a cube
+            - infer cube placement : to have a placement for a cube
+            - location prob : to list monster location probabilities
             """)
 

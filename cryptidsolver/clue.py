@@ -28,7 +28,7 @@ class Clue():
 
 
     @lru_cache(maxsize=128)
-    def accepted_tiles(self, gamemap: Map) -> set:
+    def accepted_tiles(self, gamemap: Map) -> Set[MapTile]:
 
         accepted_tiles = set()
 
