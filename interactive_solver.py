@@ -3,7 +3,7 @@ from cryptidsolver.constant.clues import by_booklet_entry
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 from cryptidsolver.game import Game
-
+from cryptidsolver import infer
 
 def parse_player(stringified: str) -> Player:
     alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
@@ -73,9 +73,15 @@ if __name__ == "__main__":
             for player in game.players:
                 print("{}'s possible clues".format(player))
                 print("----------")
-                for clue in player.possible_clues():
-                    print(clue)
-                print(" ")
+
+                if player.clue is not None:
+                    print(player.clue)
+                else:
+                    for clue in infer.possible_clues_from_placements(map=game.map, player_cubes=player.cubes, player_disks=player.disks):
+                        print(clue)
+
+                print("")
+
         elif cmd == "infer cube placement":
             raise NotImplementedError
         else:

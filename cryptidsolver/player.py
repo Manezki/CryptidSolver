@@ -12,21 +12,6 @@ class Player():
         self.cubes = []
         self.disks = []
 
-    def possible_clues(self) -> Set[Clue]:
-
-        possible_clues = set()
-
-        if self.clue is not None:
-            possible_clues.add(deepcopy(self.clue))
-            return possible_clues
-
-        for clue in CLUE_COLLECTION:
-            # Clue is possible only if it accepts all disk locations and refuses all cube locations
-            if all([clue.accepts_tile(disk) for disk in self.disks]):
-                if all([~clue.accepts_tile(cube) for cube in self.cubes]):
-                    possible_clues.add(deepcopy(clue))
-
-        return possible_clues
 
     def __repr__(self) -> str:
         return "{} player".format(self.color.capitalize())
