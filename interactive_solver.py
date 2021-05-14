@@ -90,7 +90,7 @@ if __name__ == "__main__":
                 if player.clue is not None:
                     print(player.clue)
                 else:
-                    for clue in infer.possible_clues_from_placements(map=game.map, player_cubes=player.cubes, player_disks=player.disks):
+                    for clue in player.possible_clues(game.map):
                         print(clue)
 
                 print("")
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         elif cmd == "infer cube placement":
             
             player = game.current_player()
-            before_placement = infer.possible_clues_from_placements(game.map, player.cubes, player.disks)
+            before_placement = player.possible_clues(game.map)
 
             placement_alternatives = {}
 
