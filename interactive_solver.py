@@ -96,7 +96,27 @@ if __name__ == "__main__":
                 print("")
 
         elif cmd == "infer cube placement":
-            raise NotImplementedError
+            
+            player = game.current_player()
+            before_placement = infer.possible_clues_from_placements(game.map, player.cubes, player.disks)
+
+            placement_alternatives = {}
+
+            for tile in game.map:
+                if game.accepts_cube(tile.x, tile.y):
+
+                    # Does not account for impossible clues - that is cannot produce clue-combination
+                    # that singles out a tile.
+
+                    clues_after_placement = infer.possible_clues_from_placements(game.map, player.cubes + [(tile.x, tile.y)], player.disks)
+
+                    placement_reduces_clues = len(before_placement.difference(clues_after_placement))
+                    placement_alternatives[tile] = placement_reduces_clues
+
+            minimum_reveal = sorted(placement_alternatives.items(), key=lambda x: x[1])[0]
+
+            print("Place cube on x:{} y:{} to reduce {} clues".format(minimum_reveal[0].x, minimum_reveal[0].y, minimum_reveal[1]))
+
         else:
             print("""Did not quite catch that. Use the following commands:
             - place [c/d] x y : to place Cube or Disk
