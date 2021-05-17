@@ -171,6 +171,11 @@ if __name__ == "__main__":
             } for p in expect_current}
 
             for player in expect_current:
+
+                # No point asking questions from players with known clues, i.e. acting players
+                if player.clue is not None:
+                    continue
+
                 for tile in imagined_game.map:
 
                     # imagine cube placement
