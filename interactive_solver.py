@@ -73,6 +73,11 @@ if __name__ == "__main__":
     players = [parse_player(player) for player in args.players]
     structures = [parse_structure(structure) for structure in args.structures]
 
+    __minimal_structures = [("white", "stone"), ("white", "shack"), ("green", "stone"), ("green", "shack"), ("blue", "stone"), ("blue", "shack")]
+
+    assert len(players) >= 3, "Game should have at least three players"
+    assert all(ms in [(s.color.lower(), s.shape.lower()) for s in structures] for ms in __minimal_structures), "All the basic structures should be present"
+
     game = Game(args.map, players, structures)
 
 
