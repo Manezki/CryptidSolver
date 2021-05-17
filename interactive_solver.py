@@ -1,4 +1,5 @@
 import argparse
+import copy
 
 from cryptidsolver.constant.clues import by_booklet_entry
 from cryptidsolver.player import Player
@@ -47,6 +48,19 @@ def parse_structure(stringified: str) -> Structure:
     (x, y) = (int(x), int(y))
     
     return Structure(color, struct, x, y)
+
+
+def question_fitness(n_locations: int, n_combinations: int) -> float:
+    if (n_locations == 1):
+        return 0
+    elif (n_combinations == 1 and n_locations != 1):
+        return -9999
+    elif (n_locations == 0):
+        return -9999
+    elif (n_combinations == 0):
+        return -9999
+    else:
+        return (n_locations - 1)*(n_combinations**0.5)
 
 
 if __name__ == "__main__":
@@ -131,9 +145,65 @@ if __name__ == "__main__":
 
 
         elif cmd == "question":
-            # TODO return an informative question
-            raise NotImplementedError
 
+            print()
+
+            possible_tiles = game.possible_tiles()
+            n_possible_locations = len(possible_tiles.keys())
+            n_possible_combinations = sum(possible_tiles.values())
+
+            imagined_game = copy.deepcopy(game)
+
+            expect_current = [p for p in imagined_game.players if p != imagined_game.current_player()]
+
+            potential_questions = {p: {
+                "tile": None,
+                "fitness": question_fitness(n_possible_locations, n_possible_combinations),
+                "results": {
+                    "locations": n_possible_locations,
+                    "combinations": n_possible_combinations
+                }
+            } for p in expect_current}
+
+            for player in expect_current:
+                for tile in imagined_game.map:
+
+                    # imagine cube placement
+                    player.cubes.append((tile.x, tile.y))
+
+                    after_locations = imagined_game.possible_tiles()
+                    n_negative_locations_after = len(after_locations.keys())
+                    n_negative_combinations_after = sum(after_locations.values())
+
+                    player.cubes.remove((tile.x, tile.y))
+
+                    # imagine disk placement
+
+                    player.disks.append((tile.x, tile.y))
+
+                    after_locations = imagined_game.possible_tiles()
+                    n_positive_locations_after = len(after_locations.keys())
+                    n_positive_combinations_after = sum(after_locations.values())
+
+                    player.disks.remove((tile.x, tile.y))
+
+                    fitness = (
+                            question_fitness(n_negative_locations_after, n_negative_combinations_after) +
+                            question_fitness(n_positive_locations_after, n_positive_combinations_after)
+                        )/2
+
+                    if potential_questions[player]["fitness"] < fitness:
+                        results = {
+                                "locations": (n_positive_locations_after, n_negative_locations_after),
+                                "combinations": (n_positive_combinations_after, n_negative_combinations_after)
+                            }
+                        potential_questions[player] = {"tile": tile, "fitness": fitness, "results": results}
+
+            favored_question = min(potential_questions.items(), key = lambda x: x[1]["fitness"])
+
+            print("Question found.")
+            print("Ask player: {} about x: {} y: {}".format(favored_question[0], favored_question[1]["tile"].x, favored_question[1]["tile"].y))
+            print(favored_question[1]["fitness"], favored_question[1]["results"])
 
         else:
             print("""Did not quite catch that. Try one of the following commands:
@@ -141,5 +211,6 @@ if __name__ == "__main__":
             - possible clues : to list out possible clues
             - infer cube placement : to have a placement for a cube
             - location prob : to list monster location probabilities
+            - question : to return an effective question
             """)
 
