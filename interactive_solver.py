@@ -197,7 +197,7 @@ if __name__ == "__main__":
                             question_fitness(n_positive_locations_after, n_positive_combinations_after)
                         )/2
 
-                    if potential_questions[player]["fitness"] < fitness:
+                    if fitness >= potential_questions[player]["fitness"]:
                         results = {
                                 "locations": (n_positive_locations_after, n_negative_locations_after),
                                 "combinations": (n_positive_combinations_after, n_negative_combinations_after)
