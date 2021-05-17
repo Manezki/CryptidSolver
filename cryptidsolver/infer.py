@@ -55,7 +55,7 @@ def possible_tiles(
         inverted_clues: bool - Playing with inverted clue?
 
     Returns:
-        List[Tuple[MapTile, float]] - Ordered list of maptiles with associated probabilities for monster
+        Dict[MapTile: int]] - MapTile with number of clue combinations pointing on them
     """
 
     return game.possible_tiles(inverted_clues)

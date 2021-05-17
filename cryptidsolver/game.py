@@ -90,7 +90,7 @@ class Game():
             players: List[Player] - List of players.
 
         Returns:
-            List[Tuple[MapTile, float]] - Ordered list of maptiles with associated probabilities for monster
+            Dict[MapTile: int]] - MapTile with number of clue combinations pointing on them
         """
 
         if inverted_clues:
@@ -121,6 +121,4 @@ class Game():
 
         potential_tiles = {k: v/total for k, v in potential_tiles.items()}
 
-        possible_locations = sorted(potential_tiles.items(), key=lambda x: x[1])
-
-        return possible_locations
+        return potential_tiles

@@ -122,6 +122,7 @@ if __name__ == "__main__":
         elif cmd == "location prob":
 
             possible_locations = game.possible_tiles()
+            possible_locations = sorted(possible_locations.items(), key=lambda x: x[1])
 
             print("Location probabilities")
             print("---------")
