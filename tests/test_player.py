@@ -1,7 +1,7 @@
 import unittest
 
 from cryptidsolver.game import Game
-from cryptidsolver.gamemap import Map, Structure
+from cryptidsolver.gamemap import Structure
 from cryptidsolver.player import Player
 from cryptidsolver.constant import clues
 
@@ -21,9 +21,39 @@ class TestPossibleClues(unittest.TestCase):
 
         self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
 
+
     def test_returns_non_empty_collection(self) -> None:
 
         self.assertTrue(len(self.game.players[0].possible_clues(self.game.map)) != 0, msg="Should always return non-empty collection")
+
+
+    def test_defaults_to_return_all_clues(self) -> None:
+
+        # PLAYER_2 does not have a clue assigned
+        player = self.game.players[1]
+
+        original_collection = clues.CLUE_COLLECTION.difference([clues.THREE_FROM_BLACK])
+        possible_clues = player.possible_clues(self.game.map)
+
+        self.assertSetEqual(original_collection, possible_clues, msg="Should return all clues when no cubes or disks are present")
+
+
+    def test_cubes_limit_possibile_clues(self) -> None:
+
+        # Place a cube for the 1st player
+        self.game.place_cube(1, 1)
+        player = self.game.players[0]
+
+        possible_clues = player.possible_clues(self.game.map)
+
+        # Cube on (1, 1) excludes the following clues: 2 from cougar, 1 from animal, swamp, 1 from swamp
+        original_collection = clues.CLUE_COLLECTION.difference([clues.THREE_FROM_BLACK])
+        reduced_collection = original_collection.difference([
+            clues.FOREST_OR_SWAMP, clues. DESERT_OR_SWAMP, clues.WATER_OR_SWAMP, clues.SWAMP_OR_MOUNTAIN,
+            clues.ONE_FROM_SWAMP, clues.ONE_FROM_ANIMAL, clues.TWO_FROM_COUGAR
+        ])
+
+        self.assertSetEqual(reduced_collection, possible_clues, msg="Placement of cube should remove associated clues")
 
 
 if __name__ == "__main__":

@@ -1,12 +1,11 @@
 import argparse
-import itertools
-import functools
 
 from cryptidsolver.constant.clues import by_booklet_entry
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 from cryptidsolver.game import Game
 from cryptidsolver import infer
+
 
 def parse_player(stringified: str) -> Player:
     alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
@@ -111,7 +110,7 @@ if __name__ == "__main__":
                     # Does not account for impossible clues - that is cannot produce clue-combination
                     # that singles out a tile.
 
-                    clues_after_placement = infer.possible_clues_from_placements(game.map, player.cubes + [(tile.x, tile.y)], player.disks)
+                    clues_after_placement = infer.possible_clues_after_cube_placement(game.map, player, (tile.x, tile.y))
 
                     placement_reduces_clues = len(before_placement.difference(clues_after_placement))
                     placement_alternatives[tile] = placement_reduces_clues
@@ -122,32 +121,7 @@ if __name__ == "__main__":
 
         elif cmd == "location prob":
 
-            potential_clues = []
-
-            for player in game.players:
-                if player.clue is not None:
-                    # Add known clues
-                    potential_clues.append(set([player.clue]))
-                else:
-                    potential_clues.append(player.possible_clues(game.map))
-
-            potential_tiles = {}
-            total = 0
-
-            for combination in itertools.product(*potential_clues):
-                possible_tiles = functools.reduce(lambda x, y: x & y.accepted_tiles(game.map), combination, set(game.map))
-                if len(possible_tiles) == 1:
-                    tile = possible_tiles.pop()
-                    total += 1
-
-                    if tile in potential_tiles:
-                        potential_tiles[tile] += 1
-                    else:
-                        potential_tiles[tile] = 1
-
-            potential_tiles = {k: v/total for k, v in potential_tiles.items()}
-
-            possible_locations = sorted(potential_tiles.items(), key=lambda x: x[1])
+            possible_locations = game.possible_tiles()
 
             print("Location probabilities")
             print("---------")

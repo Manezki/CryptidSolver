@@ -2,10 +2,10 @@ from typing import Set
 
 from cryptidsolver.clue import Clue
 from cryptidsolver.gamemap import Map
-from cryptidsolver import infer
+from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
 
 class Player():
-    def __init__(self, color: str, clue: Clue = None, teamname: str = None, inverse_clues: bool = False) -> "Player":
+    def __init__(self, color: str, clue: Clue = None, teamname: str = None, inverted_clues: bool = False) -> "Player":
         self.color = color
         self.teamname = teamname
         self.clue = clue
@@ -13,8 +13,22 @@ class Player():
         self.disks = []
 
 
-    def possible_clues(self, map: Map, inverted_clues: bool = False) -> Set[Clue]:
-        return infer.possible_clues_from_placements(map, self.cubes, self.disks, inverted_clues)
+    def possible_clues(self, gamemap: Map, inverted_clues: bool = False) -> Set[Clue]:
+
+        possible_clues = set()
+
+        if inverted_clues:
+            raise NotImplementedError("Missing implementation for inverted clues")
+        else:
+            clues = CLUE_COLLECTION.difference([THREE_FROM_BLACK])
+
+        for clue in clues:
+            # Clue is possible only if it accepts all disk locations and refuses all cube locations
+            if all([gamemap[disk[0], disk[1]] in clue.accepted_tiles(gamemap) for disk in self.disks]):
+                if all([gamemap[cube[0], cube[1]] not in clue.accepted_tiles(gamemap) for cube in self.cubes]):
+                    possible_clues.add(clue)
+
+        return possible_clues
 
 
     def __repr__(self) -> str:

@@ -1,4 +1,5 @@
 import itertools
+import functools
 from typing import List, Tuple
 
 from cryptidsolver.gamemap import Map
@@ -13,10 +14,6 @@ class Game():
         self.map = Map(map_descriptor, structures)
 
         self.gametick = 0
-
-        self.possible_tiles = set(self.map)
-
-        self.__reduce_possible_tiles_by_clues()
 
 
     def current_player(self) -> Player:
@@ -83,36 +80,47 @@ class Game():
 
         return (acting_player, self.map[x, y])
 
-    
-    def __reduce_possible_tiles_by_clues(self) -> None:
+
+    def possible_tiles(self, inverted_clues: bool = False) -> List[Tuple[MapTile, float]]:
+        """
+        Infer possible tiles from the clue possible clue combinations.
+
+        Args:
+            gamemap: Map - Current gamemap.
+            players: List[Player] - List of players.
+
+        Returns:
+            List[Tuple[MapTile, float]] - Ordered list of maptiles with associated probabilities for monster
+        """
+
+        if inverted_clues:
+            raise NotImplementedError("Inverse clues not implemented")
+
+        potential_clues = []
+
         for player in self.players:
             if player.clue is not None:
-                for tile in self.possible_tiles.copy():
+                # Add known clues
+                potential_clues.append(set([player.clue]))
+            else:
+                potential_clues.append(player.possible_clues(self.map))
 
-                    x, y = (tile.x, tile.y)
-                    distanced_tiles = self.map.tiles_on_distance(x, y, player.clue.distance)
-                    
-                    for clued_distance in distanced_tiles:
-                        if clued_distance not in player.clue.accepted_tiles(self.map):
-                            try:
-                                self.possible_tiles.remove(clued_distance)
-                            except KeyError:
-                                # Possibly removed already
-                                pass
-    
+        potential_tiles = {}
+        total = 0
 
-    def possible_clues(self) -> set:
-        clue_combinations = itertools.product(*[p.possible_clues for p in self.players])
-        
-        possible_combinations = set()
+        for combination in itertools.product(*potential_clues):
+            possible_tiles = functools.reduce(lambda x, y: x & y.accepted_tiles(self.map), combination, set(self.map))
+            if len(possible_tiles) == 1:
+                tile = possible_tiles.pop()
+                total += 1
 
-        for combination in clue_combinations:
-            
-            accepted_tiles = combination[0].accepted_tiles(self.map)
-            for clue in combination[1:]:
-                accepted_tiles = accepted_tiles.intersection(clue.accepted_tiles(self.map))
+                if tile in potential_tiles:
+                    potential_tiles[tile] += 1
+                else:
+                    potential_tiles[tile] = 1
 
-            if len(accepted_tiles) == 1:
-                possible_combinations.add(combination)
-        
-        return possible_combinations
+        potential_tiles = {k: v/total for k, v in potential_tiles.items()}
+
+        possible_locations = sorted(potential_tiles.items(), key=lambda x: x[1])
+
+        return possible_locations

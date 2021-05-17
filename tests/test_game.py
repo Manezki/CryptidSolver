@@ -1,7 +1,7 @@
 import unittest
 
 from cryptidsolver.game import Game
-from cryptidsolver.gamemap import Map, Structure
+from cryptidsolver.gamemap import Structure
 from cryptidsolver.player import Player
 from cryptidsolver.constant import clues
 
@@ -99,6 +99,23 @@ class TestDiskPlacement(unittest.TestCase):
         self.game.place_disk(1, 1)
 
         self.assertEqual(self.game.gametick, before_placement + 1)
+
+
+class TestPossibleTiles(unittest.TestCase):
+
+    def test_known_clues_return_a_single_tile(self) -> None:
+
+        PLAYER_1 = Player("red", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        PLAYER_2 = Player("orange", clues.by_booklet_entry("beta", 79), teamname="beta")
+        PLAYER_3 = Player("purple", clues.by_booklet_entry("epsilon", 28), teamname="epsilon")
+
+        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+
+        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+
+        possible_tiles = game.possible_tiles()
+
+        self.assertTrue(len(possible_tiles) == 1, msg="Should always return a single maptile when, all clues are known")
 
 
 if __name__ == "__main__":

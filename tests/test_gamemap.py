@@ -1,6 +1,6 @@
 import unittest
 
-from cryptidsolver.gamemap import Map, Structure, MapPiece
+from cryptidsolver.gamemap import Map, Structure
 
 MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
 STRUCTURES = [Structure("green", "stone", 12, 2), Structure("green", "shack", 7, 3), Structure("white", "stone", 8, 6),

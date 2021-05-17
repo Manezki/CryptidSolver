@@ -1,28 +1,61 @@
+import copy
+
 from typing import List, Set, Tuple
-from copy import deepcopy
 
 from cryptidsolver.clue import Clue
-from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
 from cryptidsolver.gamemap import Map
+from cryptidsolver.tile import MapTile
+from cryptidsolver.player import Player
+from cryptidsolver.game import Game
 
-def possible_clues_from_placements(
-        map: Map,
-        player_cubes: List[Tuple[int, int]],
-        player_disks: List[Tuple[int, int]],
+
+def possible_clues_for_player(
+        gamemap: Map,
+        player: Player,
+        inverted_clues: bool = False
+    ) -> Set[Clue]:
+    return player.possible_clues(gamemap, inverted_clues)
+
+
+def possible_clues_after_cube_placement(
+        gamemap: Map,
+        player: Player,
+        placement: Tuple[int, int],
         inverted_clues: bool = False
     ) -> Set[Clue]:
 
-    possible_clues = set()
+    imagined_player = copy.deepcopy(player)
+    imagined_player.cubes.append(placement)
 
-    if inverted_clues:
-        raise NotImplementedError("Missing implementation for inverted clues")
-    else:
-        clues = CLUE_COLLECTION.difference([THREE_FROM_BLACK])
+    return imagined_player.possible_clues(gamemap = gamemap, inverted_clues = inverted_clues)
 
-    for clue in clues:
-        # Clue is possible only if it accepts all disk locations and refuses all cube locations
-        if all([map[disk[0], disk[1]] in clue.accepted_tiles(map) for disk in player_disks]):
-            if all([map[cube[0], cube[1]] not in clue.accepted_tiles(map) for cube in player_cubes]):
-                possible_clues.add(deepcopy(clue))
 
-    return possible_clues
+def possible_clues_after_disk_placement(
+        gamemap: Map,
+        player: Player,
+        placement: Tuple[int, int],
+        inverted_clues: bool = False
+    ) -> Set[Clue]:
+
+    imagined_player = copy.deepcopy(player)
+    imagined_player.disks.append(placement)
+
+    return imagined_player.possible_clues(gamemap = gamemap, inverted_clues = inverted_clues)
+
+
+def possible_tiles(
+        game: Game,
+        inverted_clues: bool = False
+    ) -> List[Tuple[MapTile, float]]:
+    """
+    Infer possible tiles from the clue possible clue combinations.
+
+    Args:
+        game: Game - Current game.
+        inverted_clues: bool - Playing with inverted clue?
+
+    Returns:
+        List[Tuple[MapTile, float]] - Ordered list of maptiles with associated probabilities for monster
+    """
+
+    return game.possible_tiles(inverted_clues)
