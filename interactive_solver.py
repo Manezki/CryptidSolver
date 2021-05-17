@@ -60,7 +60,7 @@ def question_fitness(n_locations: int, n_combinations: int) -> float:
     elif (n_combinations == 0):
         return -9999
     else:
-        return (n_locations - 1)*(n_combinations**0.5)
+        return (-n_locations + 1)*(n_combinations**0.5)
 
 
 if __name__ == "__main__":
@@ -204,7 +204,7 @@ if __name__ == "__main__":
                             }
                         potential_questions[player] = {"tile": tile, "fitness": fitness, "results": results}
 
-            favored_question = min(potential_questions.items(), key = lambda x: x[1]["fitness"])
+            favored_question = max(potential_questions.items(), key = lambda x: x[1]["fitness"])
 
             print("Question found.")
             print("Ask player: {} about x: {} y: {}".format(favored_question[0], favored_question[1]["tile"].x, favored_question[1]["tile"].y))
