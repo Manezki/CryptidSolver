@@ -23,13 +23,9 @@ class Game():
     def accepts_cube(self, x: int, y: int) -> bool:
 
         # Cubes cannot be placed on tiles which already have a cube
-        map_objects = set()
         for player in self.players:
-            for tile in player.cubes:
-                map_objects.add(tile)
-
-        if (x, y) in map_objects:
-            return False
+            if (x, y) in player.cubes:
+                return False
 
         return True
 
