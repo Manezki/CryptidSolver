@@ -103,6 +103,37 @@ if __name__ == "__main__":
             except ValueError:
                 pass
 
+        elif cmd.startswith("answer") and len(cmd.split(" ")) == 5:
+            # TODO Rewrite this to safer form
+
+            try:
+                (_, color, mapObject, x, y) = cmd.split(" ")
+                (x, y) = (int(x), (int(y)))
+
+                player = None
+
+                for p in game.players:
+                    if p.color.lower() == color.lower():
+                        player = p
+
+                try:
+
+                    if mapObject == "c":
+                        action = player.cubes.append((x, y))
+                        print("{} placed cube on {}".format(player.color, (x, y)))
+                    elif mapObject == "d":
+                        action = player.disks.append((x, y))
+                        game.gametick += 1
+                        print("{} placed cube on {}".format(player.color, (x, y)))
+                    else:
+                        raise ValueError
+
+                except AttributeError:
+                    print("Player was not found")
+
+            except ValueError:
+                pass
+
         elif cmd == "possible clues":
             for player in game.players:
                 print("{}'s possible clues".format(player))
@@ -218,6 +249,7 @@ if __name__ == "__main__":
         else:
             print("""Did not quite catch that. Try one of the following commands:
             - place [c/d] x y : to place Cube or Disk
+            - answer color [c/d] x y : to answer a 'question'. Cube placement with this does not advance the turn.
             - possible clues : to list out possible clues
             - infer cube placement : to have a placement for a cube
             - location prob : to list monster location probabilities
