@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(name="cryptidsolver",
-      version="0.0.1-dev",
+      version="0.1.0",
       description="Solver for Cryptid boardgame",
       install_requires=[],
       test_requires=["tox", "pytest"],
