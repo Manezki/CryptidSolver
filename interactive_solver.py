@@ -104,35 +104,28 @@ if __name__ == "__main__":
                 pass
 
         elif cmd.startswith("answer") and len(cmd.split(" ")) == 5:
-            # TODO Rewrite this to safer form
+
+            (_, color, mapObject, x, y) = cmd.split(" ")
+            (x, y) = (int(x), (int(y)))
 
             try:
-                (_, color, mapObject, x, y) = cmd.split(" ")
-                (x, y) = (int(x), (int(y)))
-
-                player = None
-
-                for p in game.players:
-                    if p.color.lower() == color.lower():
-                        player = p
-
-                try:
-
-                    if mapObject == "c":
-                        action = player.cubes.append((x, y))
-                        print("{} placed cube on {}".format(player.color, (x, y)))
-                    elif mapObject == "d":
-                        action = player.disks.append((x, y))
-                        game.gametick += 1
-                        print("{} placed cube on {}".format(player.color, (x, y)))
-                    else:
-                        raise ValueError
-
-                except AttributeError:
-                    print("Player was not found")
+                player_colors = [player.color.lower() for player in game.players]
+                matched_player = game.players[player_colors.index(color.lower())]
 
             except ValueError:
-                pass
+                print("Player with color '{}' was not found. Please check your command".format(color))
+                continue
+
+
+            if mapObject == "c":
+                action = matched_player.cubes.append((x, y))
+                print("{} placed cube on {}".format(matched_player.color, (x, y)))
+            elif mapObject == "d":
+                action = matched_player.disks.append((x, y))
+                game.gametick += 1
+                print("{} placed cube on {}".format(matched_player.color, (x, y)))
+            else:
+                print("Placed object '{}' was not cube (c) or disk (d). Pease check your command".format(mapObject))
 
         elif cmd == "possible clues":
             for player in game.players:
@@ -190,18 +183,18 @@ if __name__ == "__main__":
 
             imagined_game = copy.deepcopy(game)
 
-            expect_current = [p for p in imagined_game.players if p != imagined_game.current_player()]
+            except_current_player = [player for player in imagined_game.players if player != imagined_game.current_player()]
 
-            potential_questions = {p: {
+            potential_questions = {player: {
                 "tile": None,
                 "fitness": question_fitness(n_possible_locations, n_possible_combinations),
                 "results": {
                     "locations": n_possible_locations,
                     "combinations": n_possible_combinations
                 }
-            } for p in expect_current}
+            } for player in except_current_player}
 
-            for player in expect_current:
+            for player in except_current_player:
 
                 # No point asking questions from players with known clues, i.e. acting players
                 if player.clue is not None:
