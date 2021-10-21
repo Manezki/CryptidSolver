@@ -24,8 +24,8 @@ class Player():
 
         for clue in clues:
             # Clue is possible only if it accepts all disk locations and refuses all cube locations
-            if all([gamemap[disk[0], disk[1]] in clue.accepted_tiles(gamemap) for disk in self.disks]):
-                if all([gamemap[cube[0], cube[1]] not in clue.accepted_tiles(gamemap) for cube in self.cubes]):
+            if all(gamemap[disk[0], disk[1]] in clue.accepted_tiles(gamemap) for disk in self.disks):
+                if all(gamemap[cube[0], cube[1]] not in clue.accepted_tiles(gamemap) for cube in self.cubes):
                     possible_clues.add(clue)
 
         return possible_clues
