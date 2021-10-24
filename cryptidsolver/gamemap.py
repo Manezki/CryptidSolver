@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Iterable, List
+from typing import Iterable, List, FrozenSet
 from cryptidsolver.structure import Structure
 from cryptidsolver.tile import _BiomeTile, MapTile
 
@@ -73,7 +73,7 @@ class Map():
 
 
     @staticmethod
-    def neighbouring_coordinates(x: int, y: int) -> set:
+    def neighbouring_coordinates(x: int, y: int) -> FrozenSet:
         neighbours = set()
 
         for row in [x-1, x , x+1]:
@@ -88,10 +88,10 @@ class Map():
                 if 1 <= row <= 12 and 1 <= col <= 9:
                     neighbours.add((row, col))
 
-        return neighbours
+        return frozenset(neighbours)
 
 
-    def tiles_on_distance(self, x: int, y: int, d: int) -> set:
+    def tiles_on_distance(self, x: int, y: int, d: int) -> FrozenSet:
         
         neighbours = set()
         neighbours.add(self.__getitem__([x, y]))
@@ -105,7 +105,7 @@ class Map():
                     new_neighbours.add(self[neig_x, neig_y])
             neighbours = neighbours.union(new_neighbours)
 
-        return neighbours
+        return frozenset(neighbours)
 
 
     def _reverse_map_piece(self, map_piece: MapPiece) -> list:

@@ -1,4 +1,4 @@
-from typing import Set
+from typing import Set, FrozenSet
 from functools import lru_cache
 
 from cryptidsolver.tile import MapTile
@@ -14,7 +14,7 @@ class Clue():
 
     def __init__(self, distance: int, distance_from: Set[str], clue_type: str = "biome") -> "Clue":
         self.distance = distance
-        self.distance_from = set(distance_from)
+        self.distance_from = frozenset(distance_from)
         self.clue_type = clue_type
 
 
@@ -35,7 +35,7 @@ class Clue():
 
 
     @lru_cache(maxsize=128)
-    def accepted_tiles(self, gamemap: Map) -> Set[MapTile]:
+    def accepted_tiles(self, gamemap: Map) -> FrozenSet[MapTile]:
 
         accepted_tiles = set()
 
@@ -50,7 +50,7 @@ class Clue():
 
         assert len(accepted_tiles) != 0, "Should accept tiles"
 
-        return accepted_tiles
+        return frozenset(accepted_tiles)
 
 
     def __tile_confers_to_clue(self, tile: MapTile) -> bool:

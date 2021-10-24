@@ -1,4 +1,4 @@
-from typing import Set
+from typing import FrozenSet
 
 from cryptidsolver.clue import Clue
 from cryptidsolver.gamemap import Map
@@ -22,7 +22,7 @@ class Player():
         self.disks = []
 
 
-    def possible_clues(self, gamemap: Map, inverted_clues: bool = False) -> Set[Clue]:
+    def possible_clues(self, gamemap: Map, inverted_clues: bool = False) -> FrozenSet[Clue]:
 
         possible_clues = set()
 
@@ -37,7 +37,7 @@ class Player():
                 if all(gamemap[cube[0], cube[1]] not in clue.accepted_tiles(gamemap) for cube in self.cubes):
                     possible_clues.add(clue)
 
-        return possible_clues
+        return frozenset(possible_clues)
 
 
     def __repr__(self) -> str:
