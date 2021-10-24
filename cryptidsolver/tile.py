@@ -3,6 +3,11 @@ from cryptidsolver.structure import Structure
 
 class _BiomeTile():
 
+    __slots__ = (
+        "biome",
+        "animal"
+    )
+
     def __init__(self, biome: str, animal: str = None) -> "_BiomeTile":
         self.biome = biome
         self.animal = animal
@@ -25,6 +30,12 @@ class _BiomeTile():
 
 
 class MapTile(_BiomeTile):
+
+    __slots__ = (
+        "x",
+        "y",
+        "structure"
+    )
 
     def __init__(self, biome: str, x: int, y: int, animal: str = None, structure: Structure = None) -> "MapTile":
         assert isinstance(x, int)

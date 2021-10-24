@@ -1,5 +1,12 @@
 class Structure():
 
+    __slots__ = (
+        "color",
+        "shape",
+        "x",
+        "y"
+    )
+
     def __init__(self, color:str, shape:str, x:int, y:int) -> "Structure":
 
         if x < 1 or y < 1:

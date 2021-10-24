@@ -49,6 +49,11 @@ class MapPiece(Enum):
     
 
 class Map():
+
+    __slots__ = (
+        "map"
+    )
+
     def __init__(self, map_description: List[str], structures: Iterable[Structure]) -> "Map":
         """
         Describe the map using the map pieces ({number}{south/north})

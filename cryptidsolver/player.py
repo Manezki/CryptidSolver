@@ -5,6 +5,15 @@ from cryptidsolver.gamemap import Map
 from cryptidsolver.constant.clues import CLUE_COLLECTION, THREE_FROM_BLACK
 
 class Player():
+
+    __slots__ = (
+        "color",
+        "teamname",
+        "clue",
+        "cubes",
+        "disks"
+    )
+
     def __init__(self, color: str, clue: Clue = None, teamname: str = None, inverted_clues: bool = False) -> "Player":
         self.color = color
         self.teamname = teamname

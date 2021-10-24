@@ -5,6 +5,13 @@ from cryptidsolver.tile import MapTile
 from cryptidsolver.gamemap import Map
 
 class Clue():
+
+    __slots__ = (
+        "distance",
+        "distance_from",
+        "clue_type"
+    )
+
     def __init__(self, distance: int, distance_from: Set[str], clue_type: str = "biome") -> "Clue":
         self.distance = distance
         self.distance_from = set(distance_from)
