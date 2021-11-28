@@ -166,5 +166,56 @@ class TestEquality(unittest.TestCase):
         self.assertEqual(a, b, msg="Order of distance_from set should not change equality")
 
 
+class TestInvertedClue(unittest.TestCase):
+
+    def test_inverting_a_clue_changes_repr(self) -> None:
+        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
+        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+
+        normal_repr = str(normal)
+        inverted_repr = str(inverted)
+
+        self.assertNotEqual(normal_repr, inverted_repr, msg="Inverting a clue should produce a different 'repr'")
+
+
+    def test_inverting_a_clue_changes_repr(self) -> None:
+        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
+        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+
+        normal_repr = hash(normal)
+        inverted_repr = hash(inverted)
+
+        self.assertNotEqual(normal_repr, inverted_repr, msg="Inverting a clue should produce a different hash")
+
+
+    def test_inverted_is_unequal_to_noninverted(self) -> None:
+        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
+        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+
+        self.assertNotEqual(normal, inverted, msg="Inverted clue must be UNEQUAL to non-inverted clue")
+
+
+    def test_inverted_clue_rejects_associated_tiles(self) -> None:
+
+        PLAYER_1 = Player("red", Clue(1, {"S"}, clue_type="biome", inverted=True), teamname="alpha")
+        PLAYER_2 = Player("cyan", None, teamname="beta")
+        PLAYER_3 = Player("purple", None, teamname="epsilon")
+
+        game = Game(
+            ["4N", "3N", "6S", "1S", "5S", "2S"],
+            [PLAYER_1, PLAYER_2, PLAYER_3],
+            [
+                Structure("black", "stone", 2, 3), Structure("green", "shack", 4, 1),
+                Structure("blue", "shack", 5, 8), Structure("blue", "stone", 6, 3),
+                Structure("white", "shack", 7, 2), Structure("green", "stone", 8, 2),
+                Structure("black", "shack", 8, 7), Structure("white", "stone", 8, 9)
+            ]
+            )
+
+        inverted_one_from_swamp_clue = Clue(1, {"S"}, clue_type="biome", inverted=True)
+
+        self.assertNotIn(game.map[1, 3], inverted_one_from_swamp_clue.accepted_tiles(game.map), msg="'Not 1 from swamp' should reject tile next to swamp")
+
+
 if __name__ == "__main__":
     unittest.main()
