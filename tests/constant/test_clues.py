@@ -35,7 +35,7 @@ class TestClueLookup(unittest.TestCase):
             try:
                 by_booklet_entry("alpha", number)
             except Exception as e:
-                if (type(e).__name__ == "AssertionError") and ("Number should in range" in e):
+                if (type(e).__name__ == "AssertionError") and ("Number should in range" in str(e)):
                     self.fail("Proper number {} was not accepted".format(number))
 
 

@@ -110,7 +110,7 @@ class Map():
 
     def _reverse_map_piece(self, map_piece: MapPiece) -> list:
         
-        reversed = []
+        reversed_piece = []
         
         for width in range(5, -1, -1):
 
@@ -119,9 +119,9 @@ class Map():
 
                 reverse_col.append(map_piece[width][height])
             
-            reversed.append(reverse_col)
+            reversed_piece.append(reverse_col)
 
-        return reversed
+        return reversed_piece
 
     def _generate_terrain_map(self, description: List[str], structures: List[Structure]) -> List[List[MapTile]]:
         """

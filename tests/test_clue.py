@@ -178,7 +178,7 @@ class TestInvertedClue(unittest.TestCase):
         self.assertNotEqual(normal_repr, inverted_repr, msg="Inverting a clue should produce a different 'repr'")
 
 
-    def test_inverting_a_clue_changes_repr(self) -> None:
+    def test_inverting_a_clue_changes_hash(self) -> None:
         normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
         inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
 
