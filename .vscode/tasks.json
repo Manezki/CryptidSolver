@@ -18,7 +18,6 @@
             "windows": {
                 "command": "${config:python.pythonPath} -m pip install -e .",
             },
-            "dependsOn": ["Update requirements"],
         },
         {
             "label": "Linting",
@@ -37,6 +36,11 @@
                 "command": "${command:python.interpreterPath} -m tox .",
             },
             "dependsOn": ["Installation"],
+        },
+        {
+            "label": "Local build",
+            "type": "shell",
+            "dependsOn": ["Unit testing", "Update requirements", "Linting"],
             "group": {
                 "kind": "build",
                 "isDefault": true
