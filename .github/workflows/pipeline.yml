@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install tox pytest
+          python -m pip install -r requirements.txt
       - name: Unittesting
         run: |
           tox
