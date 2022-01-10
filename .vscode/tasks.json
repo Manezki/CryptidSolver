@@ -4,13 +4,48 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Start interactive solver",
+            "label": "Update requirements",
             "type": "shell",
-            "command": "python interactive_solver.py --map 3N 1S 5S 4S 2N 6S --players @red_a2 orange_b79 brown_e28 --structures green_as_7,3 blue_as_7,4 white_as_10,8 blue_ss_9,1 white_ss_8,6 green_ss_12,2",
+            "command": "${command:python.interpreterPath} -m pip freeze | grep ^(?!-e ) > requirements.txt",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip freeze | Where-Object { $_ -NotMatch '^-e ' } > requirements.txt"
+            },
+        },
+        {
+            "label": "Installation",
+            "type": "shell",
+            "command": "${config:python.pythonPath} -m pip install -e .",
+            "windows": {
+                "command": "${config:python.pythonPath} -m pip install -e .",
+            },
+            "dependsOn": ["Update requirements"],
+        },
+        {
+            "label": "Linting",
+            "type": "shell",
+            "command": "${command:python.interpreterPath} -m pylint --rcfile= .pylintrc $(git ls-files '*.py')",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pylint --rcfile= .pylintrc $(git ls-files '*.py')",
+            },
+            "dependsOn": ["Installation"],
+        },
+        {
+            "label": "Unit testing",
+            "type": "shell",
+            "command": "${command:python.interpreterPath} -m tox .",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m tox .",
+            },
+            "dependsOn": ["Installation"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "Start interactive solver",
+            "type": "shell",
+            "command": "python interactive_solver.py --map 3N 1S 5S 4S 2N 6S --players @red_a2 orange_b79 brown_e28 --structures green_as_7,3 blue_as_7,4 white_as_10,8 blue_ss_9,1 white_ss_8,6 green_ss_12,2",
         }
     ]
 }
