@@ -78,17 +78,17 @@ class Clue():
 
         if self.clue_type == "biome":
             if tile.biome in self.distance_from:
-                return True and (not self.inverted)
+                return not self.inverted
         elif self.clue_type == "animal":
             if tile.animal in self.distance_from:
-                return True and (not self.inverted)
+                return not self.inverted
         else:
             try:
                 if tile.structure.color in self.distance_from:
-                    return True and (not self.inverted)
-                elif tile.structure.shape in self.distance_from:
-                    return True and (not self.inverted)
+                    return not self.inverted
+                if tile.structure.shape in self.distance_from:
+                    return not self.inverted
             except AttributeError:
                 pass
-        
+
         return self.inverted
