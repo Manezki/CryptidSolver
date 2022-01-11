@@ -19,7 +19,7 @@ def parse_player(stringified: str) -> Player:
 
     color, booklet = stringified.split("_")
     (booklet_alpha, booklet_num) = (alphabet_lookup[booklet[0].lower()], int(booklet[1:]))
-    
+
     if acting_player:
         return Player(color, by_booklet_entry(booklet_alpha, booklet_num))
     else:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     game = Game(args.map, players, structures)
 
 
-    while(True):
+    while True:
 
         cmd = input().lower().strip()
 
@@ -93,10 +93,10 @@ if __name__ == "__main__":
 
                 if mapObject == "c":
                     action = game.place_cube(x, y)
-                    print("{} placed cube on {}".format(action[0], action[1]))
+                    print(f"{action[0]} placed cube on {action[1]}")
                 elif mapObject == "d":
                     action = game.place_disk(x, y)
-                    print("{} placed disk on {}".format(action[0], action[1]))
+                    print(f"{action[0]} placed disk on {action[1]}")
                 else:
                     raise ValueError
 
@@ -113,23 +113,26 @@ if __name__ == "__main__":
                 matched_player = game.players[player_colors.index(color.lower())]
 
             except ValueError:
-                print("Player with color '{}' was not found. Please check your command".format(color))
+                print(f"Player with color '{color}' was not found. Please check your command")
                 continue
 
 
             if mapObject == "c":
                 action = matched_player.cubes.append((x, y))
-                print("{} placed cube on {}".format(matched_player.color, (x, y)))
+                print(f"{matched_player.color} placed cube on {(x, y)}")
             elif mapObject == "d":
                 action = matched_player.disks.append((x, y))
                 game.gametick += 1
-                print("{} placed cube on {}".format(matched_player.color, (x, y)))
+                print(f"{matched_player.color} placed cube on {(x, y)}")
             else:
-                print("Placed object '{}' was not cube (c) or disk (d). Pease check your command".format(mapObject))
+                print((
+                    f"Placed object '{mapObject}' was not "
+                    "cube (c) or disk (d). Pease check your command"
+                    ))
 
         elif cmd == "possible clues":
             for player in game.players:
-                print("{}'s possible clues".format(player))
+                print(f"{player}'s possible clues")
                 print("----------")
 
                 if player.clue is not None:
@@ -141,7 +144,7 @@ if __name__ == "__main__":
                 print("")
 
         elif cmd == "infer cube placement":
-            
+
             player = game.current_player()
             before_placement = player.possible_clues(game.map)
 
@@ -150,8 +153,8 @@ if __name__ == "__main__":
             for tile in game.map:
                 if game.accepts_cube(tile.x, tile.y):
 
-                    # Does not account for impossible clues - that is cannot produce clue-combination
-                    # that singles out a tile.
+                    # Does not account for impossible clues - that is cannot produce
+                    # clue-combination that singles out a tile.
 
                     clues_after_placement = infer.possible_clues_after_cube_placement(game.map, player, (tile.x, tile.y))
 
@@ -160,7 +163,10 @@ if __name__ == "__main__":
 
             minimum_reveal = sorted(placement_alternatives.items(), key=lambda x: x[1])[0]
 
-            print("Place cube on x:{} y:{} to reduce {} clues".format(minimum_reveal[0].x, minimum_reveal[0].y, minimum_reveal[1]))
+            print((
+                f"Place cube on x:{minimum_reveal[0].x} y:{minimum_reveal[0].y} "
+                f"to reduce {minimum_reveal[1]} clues"
+                ))
 
         elif cmd == "location prob":
 
@@ -170,7 +176,7 @@ if __name__ == "__main__":
             print("Location probabilities")
             print("---------")
             for location, probability in possible_locations:
-                print("Tile x:{} y:{} has probability of {}".format(location.x, location.y, probability))
+                print(f"Tile x:{location.x} y:{location.y} has probability of {probability}")
 
 
         elif cmd == "question":
@@ -236,7 +242,10 @@ if __name__ == "__main__":
             favored_question = max(potential_questions.items(), key = lambda x: x[1]["fitness"])
 
             print("Question found.")
-            print("Ask player: {} about x: {} y: {}".format(favored_question[0], favored_question[1]["tile"].x, favored_question[1]["tile"].y))
+            print((
+                f"Ask player: {favored_question[0]} about x: {favored_question[1]['tile'].x} "
+                f"y: {favored_question[1]['tile'].y}"
+                ))
             print(favored_question[1]["fitness"], favored_question[1]["results"])
 
         else:

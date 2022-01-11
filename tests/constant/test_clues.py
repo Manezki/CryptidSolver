@@ -26,7 +26,7 @@ class TestClueLookup(unittest.TestCase):
             try:
                 by_booklet_entry(alpha, 2)
             except Exception:
-                self.fail("Proper alphabet {} was not accepted".format(alpha))
+                self.fail(f"Proper alphabet {alpha} was not accepted")
 
 
     def test_accepts_proper_number_as_argument(self) -> None:
@@ -36,7 +36,7 @@ class TestClueLookup(unittest.TestCase):
                 by_booklet_entry("alpha", number)
             except Exception as e:
                 if (type(e).__name__ == "AssertionError") and ("Number should in range" in str(e)):
-                    self.fail("Proper number {} was not accepted".format(number))
+                    self.fail(f"Proper number {number} was not accepted")
 
 
     def test_fails_on_inverted_clues(self) -> None:

@@ -13,7 +13,14 @@ class Clue():
         "inverted"
     )
 
-    def __init__(self, distance: int, distance_from: Set[str], clue_type: str = "biome", inverted: bool = False) -> "Clue":
+    def __init__(
+            self,
+            distance: int,
+            distance_from: Set[str],
+            clue_type: str = "biome",
+            inverted: bool = False
+            ) -> "Clue":
+
         self.distance = distance
         self.distance_from = frozenset(distance_from)
         self.clue_type = clue_type
@@ -21,11 +28,17 @@ class Clue():
 
 
     def __repr__(self) -> str:
-        return "{}istance {} from {}".format("Not d" if self.inverted else "D", self.distance, self.distance_from)
+        return (
+            f"{'Not d' if self.inverted else 'D'}istance "
+            f"{self.distance} from {self.distance_from}"
+        )
 
 
     def __hash__(self) -> int:
-        return hash((self.distance, *sorted(list(self.distance_from)), self.clue_type, self.inverted))
+        return hash(
+            (self.distance, *sorted(list(self.distance_from)),
+            self.clue_type, self.inverted)
+            )
 
 
     def __eq__(self, other) -> bool:

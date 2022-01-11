@@ -539,14 +539,17 @@ def by_booklet_entry(alphabet: str, number: int) -> Clue:
     # alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
     # alphabet = alphabet_lookup.get(alphabet.lower(), alphabet.lower())
 
-    assert alphabet.lower() in __CLUE_LOOKUP, "Alphabet must be in {}".format(list(__CLUE_LOOKUP.keys()))
-    assert number in __CLUE_LOOKUP["alpha"].keys(), "Number should in range {}...{}".format(list(__CLUE_LOOKUP["alpha"].keys())[0], list(__CLUE_LOOKUP["alpha"].keys())[-1])
+    assert alphabet.lower() in __CLUE_LOOKUP, f"Alphabet must be in {list(__CLUE_LOOKUP.keys())}"
+    assert number in __CLUE_LOOKUP["alpha"].keys(), (
+        f"Number should in range {list(__CLUE_LOOKUP['alpha'].keys())[0]}"
+        f"...{list(__CLUE_LOOKUP['alpha'].keys())[-1]}"
+        )
 
     clue = __CLUE_LOOKUP[alphabet.lower()][number]
 
     if isinstance(clue, str) and clue.startswith("not"):
         raise NotImplementedError("Inverted clues are not implemented")
-    
+
     return copy.deepcopy(clue)
 
 

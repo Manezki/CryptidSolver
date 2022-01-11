@@ -53,4 +53,4 @@ class Structure():
 
 
     def __repr__(self) -> str:
-        return str("{} {}".format(self.color.capitalize(), self.shape.capitalize()))
+        return f"{self.color.capitalize()} {self.shape.capitalize()}"

@@ -33,7 +33,10 @@ class TestAcceptedTiles(unittest.TestCase):
         accepted_tiles = self.game.players[0].clue.accepted_tiles(self.game.map)
 
         for tile in accepted_tiles:
-            self.assertIn((tile.x, tile.y), self.forest_or_mountain_coordinates, msg="'{} @ x{} y{}' of accepted tiles does not have coordinates matching to hand-checked tiles".format(tile, tile.x, tile.y))
+            self.assertIn((tile.x, tile.y), self.forest_or_mountain_coordinates, msg=(
+                f"'{tile} @ x{tile.x} y{tile.y}' "
+                "of accepted tiles does not have coordinates matching to hand-checked tiles")
+                )
 
 
     def test_cougar_clue_accepts_tile_next_to_cougar_zone(self) -> None:

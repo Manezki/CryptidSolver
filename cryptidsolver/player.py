@@ -41,4 +41,4 @@ class Player():
 
 
     def __repr__(self) -> str:
-        return "{} player".format(self.color.capitalize())
+        return f"{self.color.capitalize()} player"

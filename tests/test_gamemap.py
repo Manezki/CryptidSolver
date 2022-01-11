@@ -77,9 +77,11 @@ class TestMapGeneration(unittest.TestCase):
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
 
         for x, y, biome in SAMPLE_LOCATIONS:
-            
+
             tile = gamemap[x, y]
-            self.assertEqual(tile.biome, biome, "The generated tiles did not match hand-checked tile: {}".format((x, y)))
+            self.assertEqual(tile.biome, biome, (
+                f"The generated tiles did not match hand-checked tile: {(x, y)}"
+                ))
 
 if __name__ == "__main__":
     unittest.main()

@@ -60,7 +60,7 @@ class Map():
 
         Args:
             description - list: Map pieces (num, heading) in an ordered list (Starting from top-left to bottom-left, continue top-right to bottom-right).
-            structures - iterable[Structures]: Map structures to be added to the map 
+            structures - iterable[Structures]: Map structures to be added to the map.
         
         Returns:
             map - [[Tile]]: 12x9 matrix of describing the game map.
@@ -129,7 +129,7 @@ class Map():
 
         Args:
             description - list: Map pieces (num, heading) in an ordered list. Left column first from top down.
-            structures - iterable: Map structures to be added to the map 
+            structures - iterable: Map structures to be added to the map.
         
         Returns:
             map - [[]]: Fullsize matrix of Tile-objects describing the game map.
@@ -181,7 +181,7 @@ class Map():
         for row in range(len(self.map[0])):
             for col in range(len(self.map)):
                 element = self.map[col][row]
-                stringify += "| {:^8} |".format(str(element))
+                stringify += f"| {str(element):^8} |"
             stringify += "\n"
         return stringify
 

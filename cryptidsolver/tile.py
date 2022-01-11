@@ -26,7 +26,7 @@ class _BiomeTile():
     
     
     def __repr__(self) -> str:
-        return "{}".format(self.biome)
+        return f"{self.biome}"
 
 
 class MapTile(_BiomeTile):
@@ -74,10 +74,10 @@ class MapTile(_BiomeTile):
         coordinates = (self.x, self.y)
 
         if self.animal is not None and self.structure is not None:
-            return str("{} - {} with {} and {}".format(coordinates, self.biome, self.animal, str(self.structure)))
+            return f"{coordinates} - {self.biome} with {self.animal} and {str(self.structure)}"
         elif self.animal is not None:
-            return str("{} - {} with {}".format(coordinates, self.biome, self.animal))
+            return f"{coordinates} - {self.biome} with {self.animal}"
         elif self.structure is not None:
-            return str("{} - {} with {}".format(coordinates, self.biome, str(self.structure)))
+            return f"{coordinates} - {self.biome} with {str(self.structure)}"
         else:
-            return str("{} - {}".format(coordinates, self.biome))
+            return f"{coordinates} - {self.biome}"
