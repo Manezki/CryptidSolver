@@ -26,7 +26,7 @@ class Player():
 
         possible_clues = set()
 
-        if inverted_clues:
+        if inverted_clues: # pylint: disable=no-else-raise
             raise NotImplementedError("Missing implementation for inverted clues")
         else:
             clues = CLUE_COLLECTION.difference([THREE_FROM_BLACK])

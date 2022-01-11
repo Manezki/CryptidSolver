@@ -34,8 +34,8 @@ class Structure():
 
     def is_green(self) -> bool:
         return self.color.lower() == "green"
-    
-    
+
+
     def is_white(self) -> bool:
         return self.color.lower() == "white"
 

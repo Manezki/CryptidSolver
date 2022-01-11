@@ -15,16 +15,16 @@ class _BiomeTile():
 
     def has_bear(self) -> bool:
         return self.animal == "bear"
-    
+
 
     def has_cougar(self) -> bool:
         return self.animal == "cougar"
 
-    
+
     def has_animal(self) -> bool:
         return self.animal is not None
-    
-    
+
+
     def __repr__(self) -> str:
         return f"{self.biome}"
 
@@ -37,7 +37,15 @@ class MapTile(_BiomeTile):
         "structure"
     )
 
-    def __init__(self, biome: str, x: int, y: int, animal: str = None, structure: Structure = None) -> "MapTile":
+    def __init__(
+            self,
+            biome: str,
+            x: int,
+            y: int,
+            animal: str = None,
+            structure: Structure = None
+        ) -> "MapTile":
+
         assert isinstance(x, int)
         assert isinstance(y, int)
         super().__init__(biome, animal)
@@ -54,17 +62,17 @@ class MapTile(_BiomeTile):
     def has_shack(self) -> bool:
         if self.structure is None:
             return False
-        else:
-            return self.structure.is_shack()
-    
+
+        return self.structure.is_shack()
+
 
     def has_stone(self) -> bool:
         if self.structure is None:
             return False
-        else:
-            return self.structure.is_stone()
 
-    
+        return self.structure.is_stone()
+
+
     def __hash__(self) -> int:
         return hash((self.x, self.y))
 
@@ -75,9 +83,11 @@ class MapTile(_BiomeTile):
 
         if self.animal is not None and self.structure is not None:
             return f"{coordinates} - {self.biome} with {self.animal} and {str(self.structure)}"
-        elif self.animal is not None:
+
+        if self.animal is not None:
             return f"{coordinates} - {self.biome} with {self.animal}"
-        elif self.structure is not None:
+
+        if self.structure is not None:
             return f"{coordinates} - {self.biome} with {str(self.structure)}"
-        else:
-            return f"{coordinates} - {self.biome}"
+
+        return f"{coordinates} - {self.biome}"

@@ -78,11 +78,11 @@ class Map():
 
         for row in [x-1, x , x+1]:
             for col in [y-1, y, y+1]:
-                
+
                 # Odd rows have left & right neighbours in y-1 and y.
                 if x%2 == 1 and col == y+1 and row != x:
                     continue
-                elif x%2 == 0 and col == y-1 and row != x:
+                if x%2 == 0 and col == y-1 and row != x:
                     continue
 
                 if 1 <= row <= 12 and 1 <= col <= 9:
@@ -92,7 +92,7 @@ class Map():
 
 
     def tiles_on_distance(self, x: int, y: int, d: int) -> FrozenSet:
-        
+
         neighbours = set()
         neighbours.add(self.__getitem__([x, y]))
 
@@ -109,16 +109,16 @@ class Map():
 
 
     def _reverse_map_piece(self, map_piece: MapPiece) -> list:
-        
+
         reversed_piece = []
-        
+
         for width in range(5, -1, -1):
 
             reverse_col = []
             for height in range(2, -1, -1):
 
                 reverse_col.append(map_piece[width][height])
-            
+
             reversed_piece.append(reverse_col)
 
         return reversed_piece
@@ -130,7 +130,7 @@ class Map():
         Args:
             description - list: Map pieces (num, heading) in an ordered list. Left column first from top down.
             structures - iterable: Map structures to be added to the map.
-        
+
         Returns:
             map - [[]]: Fullsize matrix of Tile-objects describing the game map.
         """
@@ -155,7 +155,7 @@ class Map():
             x_offset = (num // 3) * 6
 
             for x, col in enumerate(map_piece):
-                
+
                 for y, biome in enumerate(col):
 
                     x_coord = x + x_offset
@@ -163,7 +163,7 @@ class Map():
 
                     # Add one to convert into humanlike strictly positive coordinates
                     map_tile = MapTile._from_BiomeTile(biome, x_coord + 1, y_coord + 1, structure = lookup_structure.get((x_coord + 1, y_coord + 1), None))
-                    
+
                     game_map[x_coord].append(map_tile)
 
         # The 0,0 coordinate is on the top-left corner

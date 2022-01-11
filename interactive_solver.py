@@ -22,15 +22,15 @@ def parse_player(stringified: str) -> Player:
 
     if acting_player:
         return Player(color, by_booklet_entry(booklet_alpha, booklet_num))
-    else:
-        return Player(color, clue=None)
+
+    return Player(color, clue=None)
 
 
 def parse_structure(stringified: str) -> Structure:
 
     stringified = stringified.lower()
 
-    if not (stringified.startswith(("green", "white", "black", "blue"))):
+    if not stringified.startswith(("green", "white", "black", "blue")):
         raise ValueError("Structure parameter has to start by color definition")
 
     if stringified.startswith(("green", "white", "black")):
@@ -46,21 +46,24 @@ def parse_structure(stringified: str) -> Structure:
     (struct, loc) = (shape_lookup[stringified[offset + 1: offset + 3]], stringified[offset + 4:])
     (x, y) = loc.split(",")
     (x, y) = (int(x), int(y))
-    
+
     return Structure(color, struct, x, y)
 
 
 def question_fitness(n_locations: int, n_combinations: int) -> float:
-    if (n_locations == 1):
+    if n_locations == 1:
         return 0
-    elif (n_combinations == 1 and n_locations != 1):
+
+    if (n_combinations == 1 and n_locations != 1):
         return -9999
-    elif (n_locations == 0):
+
+    if n_locations == 0:
         return -9999
-    elif (n_combinations == 0):
+
+    if n_combinations == 0:
         return -9999
-    else:
-        return (-n_locations + 1)*(n_combinations**0.5)
+
+    return (-n_locations + 1)*(n_combinations**0.5)
 
 
 if __name__ == "__main__":
@@ -257,4 +260,3 @@ if __name__ == "__main__":
             - location prob : to list monster location probabilities
             - question : to return an effective question
             """)
-
