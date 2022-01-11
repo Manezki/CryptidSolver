@@ -25,7 +25,7 @@ class TestClueLookup(unittest.TestCase):
         for alpha in alphabets:
             try:
                 by_booklet_entry(alpha, 2)
-            except Exception:
+            except Exception: # pylint: disable=broad-except
                 self.fail(f"Proper alphabet {alpha} was not accepted")
 
 
@@ -34,8 +34,10 @@ class TestClueLookup(unittest.TestCase):
         for number in range(1, 97, 1):
             try:
                 by_booklet_entry("alpha", number)
-            except Exception as e:
-                if (type(e).__name__ == "AssertionError") and ("Number should in range" in str(e)):
+            except Exception as error: # pylint: disable=broad-except
+                if ((type(error).__name__ == "AssertionError")
+                    and ("Number should in range" in str(error))
+                    ):
                     self.fail(f"Proper number {number} was not accepted")
 
 
