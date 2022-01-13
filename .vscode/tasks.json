@@ -8,7 +8,8 @@
             "type": "shell",
             "command": "${command:python.interpreterPath} -m pip freeze | grep ^(?!-e ) > requirements.txt",
             "windows": {
-                "command": "${command:python.interpreterPath} -m pip freeze | Where-Object { $_ -NotMatch '^-e ' } > requirements.txt"
+                // PowerShell <6.0 does append BOM to the output-file. This confuses git. Use ASCII instead
+                "command": "${command:python.interpreterPath} -m pip freeze | Where-Object { $_ -NotMatch '^-e ' } | Out-File -Encoding ASCII '.\\requirements.txt'"
             },
         },
         {
