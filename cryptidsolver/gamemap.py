@@ -5,54 +5,64 @@ from cryptidsolver.tile import _BiomeTile, MapTile
 
 
 class MapPiece(Enum):
-    P1 = [[_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
-          [_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
-          [_BiomeTile("W"), _BiomeTile("W"), _BiomeTile("D")],
-          [_BiomeTile("W"), _BiomeTile("D"), _BiomeTile("D", "bear")],
-          [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("D", "bear")],
-          [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("F", "bear")]]
+    P1 = [
+        [_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
+        [_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
+        [_BiomeTile("W"), _BiomeTile("W"), _BiomeTile("D")],
+        [_BiomeTile("W"), _BiomeTile("D"), _BiomeTile("D", "bear")],
+        [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("D", "bear")],
+        [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("F", "bear")],
+    ]
 
-    P2 = [[_BiomeTile("S", animal="cougar"), _BiomeTile("S"), _BiomeTile("S")],
-          [_BiomeTile("F", animal="cougar"), _BiomeTile("S"), _BiomeTile("M")],
-          [_BiomeTile("F", animal="cougar"), _BiomeTile("F"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("D")]]
+    P2 = [
+        [_BiomeTile("S", animal="cougar"), _BiomeTile("S"), _BiomeTile("S")],
+        [_BiomeTile("F", animal="cougar"), _BiomeTile("S"), _BiomeTile("M")],
+        [_BiomeTile("F", animal="cougar"), _BiomeTile("F"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("D"), _BiomeTile("D")],
+    ]
 
-    P3 = [[_BiomeTile("S"), _BiomeTile("S", animal="cougar"), _BiomeTile("M", animal="cougar")],
-          [_BiomeTile("S"), _BiomeTile("S", animal="cougar"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("M"), _BiomeTile("M")],
-          [_BiomeTile("F"), _BiomeTile("W"), _BiomeTile("W")],
-          [_BiomeTile("W"), _BiomeTile("W"), _BiomeTile("W")]]
-    
-    P4 = [[_BiomeTile("D"), _BiomeTile("D"), _BiomeTile("D")],
-          [_BiomeTile("D"), _BiomeTile("D"), _BiomeTile("D")],
-          [_BiomeTile("M"), _BiomeTile("M"), _BiomeTile("D")],
-          [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("F")],
-          [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("F")],
-          [_BiomeTile("M"), _BiomeTile("W", animal="cougar"), _BiomeTile("F", animal="cougar")]]
-    
-    P5 = [[_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("D")],
-          [_BiomeTile("S"), _BiomeTile("D"), _BiomeTile("D")],
-          [_BiomeTile("S"), _BiomeTile("D"), _BiomeTile("W")],
-          [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("W")],
-          [_BiomeTile("M"), _BiomeTile("M"), _BiomeTile("W", animal="bear")],
-          [_BiomeTile("M"), _BiomeTile("M", animal="bear"), _BiomeTile("W", animal="bear")]]
-    
-    P6 = [[_BiomeTile("D", animal="bear"), _BiomeTile("M", animal="bear"), _BiomeTile("M")],
-          [_BiomeTile("D"), _BiomeTile("M"), _BiomeTile("W")],
-          [_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("W")],
-          [_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("W")],
-          [_BiomeTile("S"), _BiomeTile("F"), _BiomeTile("W")],
-          [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("F")]]
-    
+    P3 = [
+        [_BiomeTile("S"), _BiomeTile("S", animal="cougar"), _BiomeTile("M", animal="cougar")],
+        [_BiomeTile("S"), _BiomeTile("S", animal="cougar"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("M"), _BiomeTile("M")],
+        [_BiomeTile("F"), _BiomeTile("W"), _BiomeTile("W")],
+        [_BiomeTile("W"), _BiomeTile("W"), _BiomeTile("W")],
+    ]
 
-class Map():
+    P4 = [
+        [_BiomeTile("D"), _BiomeTile("D"), _BiomeTile("D")],
+        [_BiomeTile("D"), _BiomeTile("D"), _BiomeTile("D")],
+        [_BiomeTile("M"), _BiomeTile("M"), _BiomeTile("D")],
+        [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("F")],
+        [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("F")],
+        [_BiomeTile("M"), _BiomeTile("W", animal="cougar"), _BiomeTile("F", animal="cougar")],
+    ]
 
-    __slots__ = (
-        "map"
-    )
+    P5 = [
+        [_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("D")],
+        [_BiomeTile("S"), _BiomeTile("D"), _BiomeTile("D")],
+        [_BiomeTile("S"), _BiomeTile("D"), _BiomeTile("W")],
+        [_BiomeTile("M"), _BiomeTile("W"), _BiomeTile("W")],
+        [_BiomeTile("M"), _BiomeTile("M"), _BiomeTile("W", animal="bear")],
+        [_BiomeTile("M"), _BiomeTile("M", animal="bear"), _BiomeTile("W", animal="bear")],
+    ]
+
+    P6 = [
+        [_BiomeTile("D", animal="bear"), _BiomeTile("M", animal="bear"), _BiomeTile("M")],
+        [_BiomeTile("D"), _BiomeTile("M"), _BiomeTile("W")],
+        [_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("W")],
+        [_BiomeTile("S"), _BiomeTile("S"), _BiomeTile("W")],
+        [_BiomeTile("S"), _BiomeTile("F"), _BiomeTile("W")],
+        [_BiomeTile("F"), _BiomeTile("F"), _BiomeTile("F")],
+    ]
+
+
+class Map:
+
+    __slots__ = "map"
 
     def __init__(self, map_description: List[str], structures: Iterable[Structure]) -> "Map":
         """
@@ -61,7 +71,7 @@ class Map():
         Args:
             description - list: Map pieces (num, heading) in an ordered list (Starting from top-left to bottom-left, continue top-right to bottom-right).
             structures - iterable[Structures]: Map structures to be added to the map.
-        
+
         Returns:
             map - [[Tile]]: 12x9 matrix of describing the game map.
         """
@@ -71,25 +81,23 @@ class Map():
 
         self.map = self._generate_terrain_map(map_description, structures)
 
-
     @staticmethod
     def neighbouring_coordinates(x: int, y: int) -> FrozenSet:
         neighbours = set()
 
-        for row in [x-1, x , x+1]:
-            for col in [y-1, y, y+1]:
+        for row in [x - 1, x, x + 1]:
+            for col in [y - 1, y, y + 1]:
 
                 # Odd rows have left & right neighbours in y-1 and y.
-                if x%2 == 1 and col == y+1 and row != x:
+                if x % 2 == 1 and col == y + 1 and row != x:
                     continue
-                if x%2 == 0 and col == y-1 and row != x:
+                if x % 2 == 0 and col == y - 1 and row != x:
                     continue
 
                 if 1 <= row <= 12 and 1 <= col <= 9:
                     neighbours.add((row, col))
 
         return frozenset(neighbours)
-
 
     def tiles_on_distance(self, x: int, y: int, d: int) -> FrozenSet:
 
@@ -107,7 +115,6 @@ class Map():
 
         return frozenset(neighbours)
 
-
     def _reverse_map_piece(self, map_piece: MapPiece) -> list:
 
         reversed_piece = []
@@ -123,7 +130,9 @@ class Map():
 
         return reversed_piece
 
-    def _generate_terrain_map(self, description: List[str], structures: List[Structure]) -> List[List[MapTile]]:
+    def _generate_terrain_map(
+        self, description: List[str], structures: List[Structure]
+    ) -> List[List[MapTile]]:
         """
         Form a map from map pieces.
 
@@ -135,8 +144,14 @@ class Map():
             map - [[]]: Fullsize matrix of Tile-objects describing the game map.
         """
 
-        lookup_mapPiece = {"1": MapPiece.P1, "2": MapPiece.P2, "3": MapPiece.P3,
-                        "4": MapPiece.P4, "5": MapPiece.P5, "6": MapPiece.P6,}
+        lookup_mapPiece = {
+            "1": MapPiece.P1,
+            "2": MapPiece.P2,
+            "3": MapPiece.P3,
+            "4": MapPiece.P4,
+            "5": MapPiece.P5,
+            "6": MapPiece.P6,
+        }
 
         lookup_structure = {(structure.x, structure.y): structure for structure in structures}
 
@@ -162,19 +177,22 @@ class Map():
                     y_coord = y + y_offset
 
                     # Add one to convert into humanlike strictly positive coordinates
-                    map_tile = MapTile._from_BiomeTile(biome, x_coord + 1, y_coord + 1, structure = lookup_structure.get((x_coord + 1, y_coord + 1), None))
+                    map_tile = MapTile._from_BiomeTile(
+                        biome,
+                        x_coord + 1,
+                        y_coord + 1,
+                        structure=lookup_structure.get((x_coord + 1, y_coord + 1), None),
+                    )
 
                     game_map[x_coord].append(map_tile)
 
         # The 0,0 coordinate is on the top-left corner
         return game_map
 
-
     def __iter__(self) -> MapTile:
         for col in self.map:
             for tile in col:
                 yield tile
-
 
     def __repr__(self) -> str:
         stringify = ""
@@ -184,7 +202,6 @@ class Map():
                 stringify += f"| {str(element):^8} |"
             stringify += "\n"
         return stringify
-
 
     def __getitem__(self, coordinates) -> MapTile:
 

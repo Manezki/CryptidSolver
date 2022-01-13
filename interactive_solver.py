@@ -43,7 +43,7 @@ def parse_structure(stringified: str) -> Structure:
 
     offset = len(color)
 
-    (struct, loc) = (shape_lookup[stringified[offset + 1: offset + 3]], stringified[offset + 4:])
+    (struct, loc) = (shape_lookup[stringified[offset + 1 : offset + 3]], stringified[offset + 4 :])
     (x, y) = loc.split(",")
     (x, y) = (int(x), int(y))
 
@@ -54,7 +54,7 @@ def question_fitness(n_locations: int, n_combinations: int) -> float:
     if n_locations == 1:
         return 0
 
-    if (n_combinations == 1 and n_locations != 1):
+    if n_combinations == 1 and n_locations != 1:
         return -9999
 
     if n_locations == 0:
@@ -63,26 +63,53 @@ def question_fitness(n_locations: int, n_combinations: int) -> float:
     if n_combinations == 0:
         return -9999
 
-    return (-n_locations + 1)*(n_combinations**0.5)
+    return (-n_locations + 1) * (n_combinations ** 0.5)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Interactive Cryptid solver")
-    parser.add_argument("--map", type=str, nargs=6, required=True, help="Map description. Columnar from top-left as '(Mappiece number)(S/N)'")
-    parser.add_argument("--players", type=str, nargs="+", required=True, help="Ordered players as '[@](color)_(clue alphabet)(clue number)' with @ for acting player")
-    parser.add_argument("--structures", type=str, nargs="+", required=True, help="Structures as '(color)_([SS/AS])_(x),(y)'")
+    parser.add_argument(
+        "--map",
+        type=str,
+        nargs=6,
+        required=True,
+        help="Map description. Columnar from top-left as '(Mappiece number)(S/N)'",
+    )
+    parser.add_argument(
+        "--players",
+        type=str,
+        nargs="+",
+        required=True,
+        help="Ordered players as '[@](color)_(clue alphabet)(clue number)' with @ for acting player",
+    )
+    parser.add_argument(
+        "--structures",
+        type=str,
+        nargs="+",
+        required=True,
+        help="Structures as '(color)_([SS/AS])_(x),(y)'",
+    )
     args = parser.parse_args()
 
     players = [parse_player(player) for player in args.players]
     structures = [parse_structure(structure) for structure in args.structures]
 
-    __minimal_structures = [("white", "stone"), ("white", "shack"), ("green", "stone"), ("green", "shack"), ("blue", "stone"), ("blue", "shack")]
+    __minimal_structures = [
+        ("white", "stone"),
+        ("white", "shack"),
+        ("green", "stone"),
+        ("green", "shack"),
+        ("blue", "stone"),
+        ("blue", "shack"),
+    ]
 
     assert len(players) >= 3, "Game should have at least three players"
-    assert all(ms in [(s.color.lower(), s.shape.lower()) for s in structures] for ms in __minimal_structures), "All the basic structures should be present"
+    assert all(
+        ms in [(s.color.lower(), s.shape.lower()) for s in structures]
+        for ms in __minimal_structures
+    ), "All the basic structures should be present"
 
     game = Game(args.map, players, structures)
-
 
     while True:
 
@@ -119,7 +146,6 @@ if __name__ == "__main__":
                 print(f"Player with color '{color}' was not found. Please check your command")
                 continue
 
-
             if mapObject == "c":
                 action = matched_player.cubes.append((x, y))
                 print(f"{matched_player.color} placed cube on {(x, y)}")
@@ -128,10 +154,12 @@ if __name__ == "__main__":
                 game.gametick += 1
                 print(f"{matched_player.color} placed cube on {(x, y)}")
             else:
-                print((
-                    f"Placed object '{mapObject}' was not "
-                    "cube (c) or disk (d). Pease check your command"
-                    ))
+                print(
+                    (
+                        f"Placed object '{mapObject}' was not "
+                        "cube (c) or disk (d). Pease check your command"
+                    )
+                )
 
         elif cmd == "possible clues":
             for player in game.players:
@@ -159,17 +187,23 @@ if __name__ == "__main__":
                     # Does not account for impossible clues - that is cannot produce
                     # clue-combination that singles out a tile.
 
-                    clues_after_placement = infer.possible_clues_after_cube_placement(game.map, player, (tile.x, tile.y))
+                    clues_after_placement = infer.possible_clues_after_cube_placement(
+                        game.map, player, (tile.x, tile.y)
+                    )
 
-                    placement_reduces_clues = len(before_placement.difference(clues_after_placement))
+                    placement_reduces_clues = len(
+                        before_placement.difference(clues_after_placement)
+                    )
                     placement_alternatives[tile] = placement_reduces_clues
 
             minimum_reveal = sorted(placement_alternatives.items(), key=lambda x: x[1])[0]
 
-            print((
-                f"Place cube on x:{minimum_reveal[0].x} y:{minimum_reveal[0].y} "
-                f"to reduce {minimum_reveal[1]} clues"
-                ))
+            print(
+                (
+                    f"Place cube on x:{minimum_reveal[0].x} y:{minimum_reveal[0].y} "
+                    f"to reduce {minimum_reveal[1]} clues"
+                )
+            )
 
         elif cmd == "location prob":
 
@@ -181,7 +215,6 @@ if __name__ == "__main__":
             for location, probability in possible_locations:
                 print(f"Tile x:{location.x} y:{location.y} has probability of {probability}")
 
-
         elif cmd == "question":
 
             print()
@@ -192,16 +225,23 @@ if __name__ == "__main__":
 
             imagined_game = copy.deepcopy(game)
 
-            except_current_player = [player for player in imagined_game.players if player != imagined_game.current_player()]
+            except_current_player = [
+                player
+                for player in imagined_game.players
+                if player != imagined_game.current_player()
+            ]
 
-            potential_questions = {player: {
-                "tile": None,
-                "fitness": question_fitness(n_possible_locations, n_possible_combinations),
-                "results": {
-                    "locations": n_possible_locations,
-                    "combinations": n_possible_combinations
+            potential_questions = {
+                player: {
+                    "tile": None,
+                    "fitness": question_fitness(n_possible_locations, n_possible_combinations),
+                    "results": {
+                        "locations": n_possible_locations,
+                        "combinations": n_possible_combinations,
+                    },
                 }
-            } for player in except_current_player}
+                for player in except_current_player
+            }
 
             for player in except_current_player:
 
@@ -231,32 +271,45 @@ if __name__ == "__main__":
                     player.disks.remove((tile.x, tile.y))
 
                     fitness = (
-                            question_fitness(n_negative_locations_after, n_negative_combinations_after) +
-                            question_fitness(n_positive_locations_after, n_positive_combinations_after)
-                        )/2
+                        question_fitness(n_negative_locations_after, n_negative_combinations_after)
+                        + question_fitness(
+                            n_positive_locations_after, n_positive_combinations_after
+                        )
+                    ) / 2
 
                     if fitness >= potential_questions[player]["fitness"]:
                         results = {
-                                "locations": (n_positive_locations_after, n_negative_locations_after),
-                                "combinations": (n_positive_combinations_after, n_negative_combinations_after)
-                            }
-                        potential_questions[player] = {"tile": tile, "fitness": fitness, "results": results}
+                            "locations": (n_positive_locations_after, n_negative_locations_after),
+                            "combinations": (
+                                n_positive_combinations_after,
+                                n_negative_combinations_after,
+                            ),
+                        }
+                        potential_questions[player] = {
+                            "tile": tile,
+                            "fitness": fitness,
+                            "results": results,
+                        }
 
-            favored_question = max(potential_questions.items(), key = lambda x: x[1]["fitness"])
+            favored_question = max(potential_questions.items(), key=lambda x: x[1]["fitness"])
 
             print("Question found.")
-            print((
-                f"Ask player: {favored_question[0]} about x: {favored_question[1]['tile'].x} "
-                f"y: {favored_question[1]['tile'].y}"
-                ))
+            print(
+                (
+                    f"Ask player: {favored_question[0]} about x: {favored_question[1]['tile'].x} "
+                    f"y: {favored_question[1]['tile'].y}"
+                )
+            )
             print(favored_question[1]["fitness"], favored_question[1]["results"])
 
         else:
-            print("""Did not quite catch that. Try one of the following commands:
+            print(
+                """Did not quite catch that. Try one of the following commands:
             - place [c/d] x y : to place Cube or Disk
             - answer color [c/d] x y : to answer a 'question'. Cube placement with this does not advance the turn.
             - possible clues : to list out possible clues
             - infer cube placement : to have a placement for a cube
             - location prob : to list monster location probabilities
             - question : to return an effective question
-            """)
+            """
+            )

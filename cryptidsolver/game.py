@@ -8,17 +8,17 @@ from cryptidsolver.structure import Structure
 from cryptidsolver.tile import MapTile
 
 
-class Game():
-    def __init__(self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]) -> "Game":
+class Game:
+    def __init__(
+        self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]
+    ) -> "Game":
         self.players = ordered_players
         self.map = Map(map_descriptor, structures)
 
         self.gametick = 0
 
-
     def current_player(self) -> Player:
         return self.players[self.gametick % len(self.players)]
-
 
     def accepts_cube(self, x: int, y: int) -> bool:
 
@@ -29,7 +29,6 @@ class Game():
 
         return True
 
-
     def place_cube(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
         """
         Place a cube for the acting player.
@@ -38,7 +37,7 @@ class Game():
             x - int : x coordinate for the cube. In range 1 ... 12
             y - int : y coordinate for the cube. In range 1 ... 9
             advance_tick - bool : Advance gametick. This should be false when players place a cube after unsuccesful question.
-        
+
         Returns:
             Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
         """
@@ -53,7 +52,6 @@ class Game():
             self.gametick += 1
 
         return (acting_player, self.map[x, y])
-
 
     def place_disk(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
         """
@@ -75,7 +73,6 @@ class Game():
             self.gametick += 1
 
         return (acting_player, self.map[x, y])
-
 
     def possible_tiles(self, inverted_clues: bool = False) -> List[Tuple[MapTile, float]]:
         """
@@ -105,7 +102,9 @@ class Game():
         total = 0
 
         for combination in itertools.product(*potential_clues):
-            possible_tiles = functools.reduce(lambda x, y: x & y.accepted_tiles(self.map), combination, set(self.map))
+            possible_tiles = functools.reduce(
+                lambda x, y: x & y.accepted_tiles(self.map), combination, set(self.map)
+            )
             if len(possible_tiles) == 1:
                 tile = possible_tiles.pop()
                 total += 1
@@ -115,6 +114,6 @@ class Game():
                 else:
                     potential_tiles[tile] = 1
 
-        potential_tiles = {k: v/total for k, v in potential_tiles.items()}
+        potential_tiles = {k: v / total for k, v in potential_tiles.items()}
 
         return potential_tiles
