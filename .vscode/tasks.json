@@ -32,9 +32,9 @@
         {
             "label": "Linting",
             "type": "shell",
-            "command": "${command:python.interpreterPath} -m pylint --rcfile= .pylintrc $(git ls-files '*.py')",
+            "command": "${command:python.interpreterPath} -m pylint --rcfile=.pylintrc $(git ls-files '*.py')",
             "windows": {
-                "command": "${command:python.interpreterPath} -m pylint --rcfile= .pylintrc $(git ls-files '*.py')",
+                "command": "${command:python.interpreterPath} -m pylint --rcfile=.pylintrc $(git ls-files '*.py')",
             },
             "dependsOn": ["Autoformat using Black"],
         },

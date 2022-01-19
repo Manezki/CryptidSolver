@@ -23,7 +23,7 @@ jobs:
           tox
       - name: Linting
         run: |
-          python -m pylint --rcfile= .pylintrc $(git ls-files '*.py')
+          python -m pylint --rcfile=.pylintrc $(git ls-files '*.py')
       - name: Mypy analysis
         run: |
           python -m mypy $(git ls-files '*.py')
