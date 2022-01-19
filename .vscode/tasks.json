@@ -39,6 +39,15 @@
             "dependsOn": ["Autoformat using Black"],
         },
         {
+            "label": "MyPy type-checking",
+            "type": "shell",
+            "command": "${command:python.interpreterPath} -m mypy $(git ls-files '*.py')",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m mypy $(git ls-files '*.py')",
+            },
+            "dependsOn": ["Installation"],
+        },
+        {
             "label": "Unit testing",
             "type": "shell",
             "command": "${command:python.interpreterPath} -m tox .",
@@ -50,7 +59,7 @@
         {
             "label": "Local build",
             "type": "shell",
-            "dependsOn": ["Unit testing", "Update requirements", "Linting"],
+            "dependsOn": ["Unit testing", "Update requirements", "Linting", "MyPy type-checking"],
             "group": {
                 "kind": "build",
                 "isDefault": true
