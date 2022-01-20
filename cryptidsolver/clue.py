@@ -6,6 +6,9 @@ from cryptidsolver.gamemap import Map
 
 
 class Clue:
+    """
+    Represents a Clue
+    """
 
     __slots__ = ("distance", "distance_from", "clue_type", "inverted")
 
@@ -16,6 +19,15 @@ class Clue:
         clue_type: str = "biome",
         inverted: bool = False,
     ) -> None:
+        """
+        Construct a game clue
+
+        Args:
+            distance (int): Distance mentioned on clue. For 'on X', use 0.
+            distance_from (Set[str]): Distance from what
+            clue_type (str): Type of clue biome/animal/structure. Defaults to "biome".
+            inverted (bool, optional): Is the clue inverted, i.e. 'not X'. Defaults to False.
+        """
 
         self.distance = distance
         self.distance_from = frozenset(distance_from)
@@ -47,6 +59,15 @@ class Clue:
 
     @lru_cache(maxsize=128)
     def accepted_tiles(self, gamemap: Map) -> FrozenSet[MapTile]:
+        """
+        Infer which tiles are possible for given clue
+
+        Args:
+            gamemap (Map): Current gamemap
+
+        Returns:
+            FrozenSet[MapTile]: Tiles that are possible according to the clue
+        """
 
         accepted_tiles = set()
 

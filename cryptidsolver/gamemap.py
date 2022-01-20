@@ -5,6 +5,14 @@ from cryptidsolver.tile import _BiomeTile, MapTile
 
 
 class MapPiece(Enum):
+    """
+    Possible MapPieces provided in the basegame. Enum name corresponds to
+    number of the boardgame's map pieces
+
+    Args:
+        Enum (List[List[_BiomeTile]]): MapPiece described in the basegame
+    """
+
     P1 = [
         [_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
         [_BiomeTile("W"), _BiomeTile("S"), _BiomeTile("S")],
@@ -61,19 +69,21 @@ class MapPiece(Enum):
 
 
 class Map:
+    """
+    Describes the gamemap
+    """
 
-    __slots__ = "map"
+    __slots__ = ("map",)
 
     def __init__(self, map_description: List[str], structures: List[Structure]) -> None:
         """
-        Describe the map using the map pieces ({number}{south/north})
+        Construct the gamemap using the map pieces ({number}{south/north})
 
         Args:
-            description - list: Map pieces (num, heading) in an ordered list (Starting from top-left to bottom-left, continue top-right to bottom-right).
-            structures - iterable[Structures]: Map structures to be added to the map.
-
-        Returns:
-            map - [[Tile]]: 12x9 matrix of describing the game map.
+            description (List[str]): Map pieces (num, heading) in an ordered list
+                                    (Starting from top-left to bottom-left,
+                                    continue top-right to bottom-right).
+            structures (List[Structures]): Map structures to be added to the map.
         """
 
         assert len(structures) == 6 or len(structures) == 8, "Game must have 6 or 8 structures"
@@ -83,6 +93,16 @@ class Map:
 
     @staticmethod
     def neighbouring_coordinates(x: int, y: int) -> FrozenSet:
+        """
+        Returns the surrounding coordinates to tile at x,y.
+
+        Args:
+            x (int): x coordinate - left-most column being 1
+            y (int): y coordinate - top-most row being 1
+
+        Returns:
+            FrozenSet: Tiles surrounding x,y
+        """
         neighbours = set()
 
         for row in [x - 1, x, x + 1]:
@@ -100,6 +120,17 @@ class Map:
         return frozenset(neighbours)
 
     def tiles_on_distance(self, x: int, y: int, d: int) -> FrozenSet:
+        """
+        Returns tiles within distance d of tile x,y.
+
+        Args:
+            x (int): x coordinate - left-most column being 1
+            y (int): y coordinate - top-most row being 1
+            d (int): distance from tile
+
+        Returns:
+            FrozenSet: Tiles within distance d from tile x,y
+        """
 
         neighbours = set()
         neighbours.add(self.__getitem__([x, y]))
@@ -116,6 +147,15 @@ class Map:
         return frozenset(neighbours)
 
     def _reverse_map_piece(self, map_piece: List[List[_BiomeTile]]) -> List[List[_BiomeTile]]:
+        """
+        Generate a new MapPiece that is reversed (rotated 180*) from given map piece.
+
+        Args:
+            map_piece (List[List[_BiomeTile]]): Map piece to be reversed.
+
+        Returns:
+            List[List[_BiomeTile]]: Reversed map piece
+        """
 
         reversed_piece = []
 
@@ -137,11 +177,11 @@ class Map:
         Form a map from map pieces.
 
         Args:
-            description - list: Map pieces (num, heading) in an ordered list. Left column first from top down.
-            structures - iterable: Map structures to be added to the map.
+            description (list): Map pieces (num, heading) in an ordered list. Left column first from top down.
+            structures (List[Structure]): Map structures to be added to the map.
 
         Returns:
-            map - [[]]: Fullsize matrix of Tile-objects describing the game map.
+            List[List[MapTile]]: Fullsize matrix of Tile-objects describing the game map.
         """
 
         lookup_mapPiece = {

@@ -19,9 +19,26 @@ class Game:
         self.gametick = 0
 
     def current_player(self) -> Player:
+        """
+        Returns the current acting player.
+
+        Returns:
+            Player: Current acting player
+        """
         return self.players[self.gametick % len(self.players)]
 
     def accepts_cube(self, x: int, y: int) -> bool:
+        """
+        Check whether coordinates accept a cube.
+        Evaluates to false, when cube is already present.
+
+        Args:
+            x (int): x coordinate - left-most column being 1
+            y (int): y coordinate - top-most row being 1
+
+        Returns:
+            bool: Can a cube be placed on x,y tile
+        """
 
         # Cubes cannot be placed on tiles which already have a cube
         for player in self.players:
@@ -35,12 +52,12 @@ class Game:
         Place a cube for the acting player.
 
         Args:
-            x - int : x coordinate for the cube. In range 1 ... 12
-            y - int : y coordinate for the cube. In range 1 ... 9
-            advance_tick - bool : Advance gametick. This should be false when players place a cube after unsuccesful question.
+            x (int): x coordinate for the cube. In range 1 ... 12
+            y (int): y coordinate for the cube. In range 1 ... 9
+            advance_tick (bool): Advance gametick. This should be false when players place a cube after unsuccesful question.
 
         Returns:
-            Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
+            Tuple[Player, MapTile]: Acting player with the MapTile at location [x, y]
         """
 
         if not self.accepts_cube(x, y):
@@ -59,12 +76,12 @@ class Game:
         Place a disk for the acting player.
 
         Args:
-            x - int : x coordinate for the disk. In range 1 ... 12
-            y - int : y coordinate for the disk. In range 1 ... 9
-            advance_tick - bool : Advance gametick. This should be false when players respond to monster location guess.
+            x (int): x coordinate for the disk. In range 1 ... 12
+            y (int): y coordinate for the disk. In range 1 ... 9
+            advance_tick (bool): Advance gametick. This should be false when players respond to monster location guess.
 
         Returns:
-            Tuple[Player, MapTile] : Acting player with the MapTile at location [x, y]
+            Tuple[Player, MapTile]: Acting player with the MapTile at location [x, y]
         """
 
         acting_player = self.current_player()
