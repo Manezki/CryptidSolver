@@ -5,7 +5,7 @@ class _BiomeTile:
 
     __slots__ = ("biome", "animal")
 
-    def __init__(self, biome: str, animal: str = None) -> "_BiomeTile":
+    def __init__(self, biome: str, animal: str = None) -> None:
         self.biome = biome
         self.animal = animal
 
@@ -28,7 +28,7 @@ class MapTile(_BiomeTile):
 
     def __init__(
         self, biome: str, x: int, y: int, animal: str = None, structure: Structure = None
-    ) -> "MapTile":
+    ) -> None:
 
         assert isinstance(x, int)
         assert isinstance(y, int)

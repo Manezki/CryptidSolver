@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Iterable, List, FrozenSet
+from typing import Generator, List, FrozenSet
 from cryptidsolver.structure import Structure
 from cryptidsolver.tile import _BiomeTile, MapTile
 
@@ -64,7 +64,7 @@ class Map:
 
     __slots__ = "map"
 
-    def __init__(self, map_description: List[str], structures: Iterable[Structure]) -> "Map":
+    def __init__(self, map_description: List[str], structures: List[Structure]) -> None:
         """
         Describe the map using the map pieces ({number}{south/north})
 
@@ -115,7 +115,7 @@ class Map:
 
         return frozenset(neighbours)
 
-    def _reverse_map_piece(self, map_piece: MapPiece) -> list:
+    def _reverse_map_piece(self, map_piece: List[List[_BiomeTile]]) -> List[List[_BiomeTile]]:
 
         reversed_piece = []
 
@@ -155,7 +155,7 @@ class Map:
 
         lookup_structure = {(structure.x, structure.y): structure for structure in structures}
 
-        game_map = [[], [], [], [], [], [], [], [], [], [], [], []]
+        game_map: List[List[MapTile]] = [[], [], [], [], [], [], [], [], [], [], [], []]
 
         for num, descriptor in enumerate(description):
             piece_num, piece_heading = descriptor[0], descriptor[1]
@@ -164,7 +164,8 @@ class Map:
             if piece_heading.lower() == "s":
                 map_piece = self._reverse_map_piece(map_piece)
 
-            # The 6x3 pieces are added in blocks starting from top-left corner. Offset for block coordinates can then be
+            # The 6x3 pieces are added in blocks starting from top-left corner.
+            # Offset for block coordinates can then be
             # calculated from the block number
             y_offset = (num % 3) * 3
             x_offset = (num // 3) * 6
@@ -189,7 +190,7 @@ class Map:
         # The 0,0 coordinate is on the top-left corner
         return game_map
 
-    def __iter__(self) -> MapTile:
+    def __iter__(self) -> Generator[MapTile, None, None]:
         for col in self.map:
             for tile in col:
                 yield tile

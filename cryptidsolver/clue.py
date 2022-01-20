@@ -15,7 +15,7 @@ class Clue:
         distance_from: Set[str],
         clue_type: str = "biome",
         inverted: bool = False,
-    ) -> "Clue":
+    ) -> None:
 
         self.distance = distance
         self.distance_from = frozenset(distance_from)
@@ -68,7 +68,7 @@ class Clue:
                 ):
                     accepted_tiles.add(tile)
 
-        assert len(accepted_tiles) != 0, "Should accept tiles"
+        assert len(accepted_tiles) != 0, "Clue should always accept at least a single tile"
 
         return frozenset(accepted_tiles)
 
@@ -80,13 +80,10 @@ class Clue:
         elif self.clue_type == "animal":
             if tile.animal in self.distance_from:
                 return not self.inverted
-        else:
-            try:
-                if tile.structure.color in self.distance_from:
-                    return not self.inverted
-                if tile.structure.shape in self.distance_from:
-                    return not self.inverted
-            except AttributeError:
-                pass
+        elif tile.structure is not None:
+            if tile.structure.color in self.distance_from:
+                return not self.inverted
+            if tile.structure.shape in self.distance_from:
+                return not self.inverted
 
         return self.inverted

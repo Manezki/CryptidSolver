@@ -1,17 +1,18 @@
 import itertools
 import functools
-from typing import List, Tuple
+from typing import Dict, FrozenSet, List, Tuple
 
 from cryptidsolver.gamemap import Map
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 from cryptidsolver.tile import MapTile
+from cryptidsolver.clue import Clue
 
 
 class Game:
     def __init__(
         self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]
-    ) -> "Game":
+    ) -> None:
         self.players = ordered_players
         self.map = Map(map_descriptor, structures)
 
@@ -74,7 +75,7 @@ class Game:
 
         return (acting_player, self.map[x, y])
 
-    def possible_tiles(self, inverted_clues: bool = False) -> List[Tuple[MapTile, float]]:
+    def possible_tiles(self, inverted_clues: bool = False) -> Dict[MapTile, float]:
         """
         Infer possible tiles from the clue possible clue combinations.
 
@@ -89,16 +90,16 @@ class Game:
         if inverted_clues:
             raise NotImplementedError("Inverse clues not implemented")
 
-        potential_clues = []
+        potential_clues: List[FrozenSet[Clue]] = []
 
         for player in self.players:
             if player.clue is not None:
                 # Add known clues
-                potential_clues.append(set([player.clue]))
+                potential_clues.append(frozenset([player.clue]))
             else:
                 potential_clues.append(player.possible_clues(self.map))
 
-        potential_tiles = {}
+        potential_tiles: Dict[MapTile, float] = {}
         total = 0
 
         for combination in itertools.product(*potential_clues):

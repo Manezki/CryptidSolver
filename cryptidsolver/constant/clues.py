@@ -576,7 +576,11 @@ def by_booklet_entry(alphabet: str, number: int) -> Clue:
     if isinstance(clue, str) and clue.startswith("not"):
         raise NotImplementedError("Inverted clues are not implemented")
 
-    return copy.deepcopy(clue)
+    if isinstance(clue, Clue):
+        return copy.deepcopy(clue)
+
+    # Presumable clue was str, meaning it's a placeholder
+    raise NotImplementedError("Inverted clues not implemented")
 
 
 if __name__ == "__main__":

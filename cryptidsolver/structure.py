@@ -2,7 +2,7 @@ class Structure:
 
     __slots__ = ("color", "shape", "x", "y")
 
-    def __init__(self, color: str, shape: str, x: int, y: int) -> "Structure":
+    def __init__(self, color: str, shape: str, x: int, y: int) -> None:
 
         if x < 1 or y < 1:
             raise ValueError("Coordinates have to be strictly positive")

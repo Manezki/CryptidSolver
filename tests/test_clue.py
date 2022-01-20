@@ -86,6 +86,9 @@ class TestAcceptedTiles(unittest.TestCase):
 
     def test_accepted_tiles_have_matching_coordinates(self) -> None:
 
+        if self.game.players[0].clue is None:
+            self.fail("Test requires player 1 to have a clue defined")
+
         accepted_tiles = self.game.players[0].clue.accepted_tiles(self.game.map)
 
         for tile in accepted_tiles:

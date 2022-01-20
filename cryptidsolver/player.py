@@ -1,4 +1,4 @@
-from typing import FrozenSet
+from typing import FrozenSet, List, Optional, Tuple
 
 from cryptidsolver.clue import Clue
 from cryptidsolver.gamemap import Map
@@ -10,13 +10,17 @@ class Player:
     __slots__ = ("color", "teamname", "clue", "cubes", "disks")
 
     def __init__(
-        self, color: str, clue: Clue = None, teamname: str = None, inverted_clues: bool = False
-    ) -> "Player":
+        self,
+        color: str,
+        clue: Optional[Clue] = None,
+        teamname: Optional[str] = None,
+        inverted_clues: bool = False,
+    ) -> None:
         self.color = color
         self.teamname = teamname
         self.clue = clue
-        self.cubes = []
-        self.disks = []
+        self.cubes: List[Tuple[int, int]] = []
+        self.disks: List[Tuple[int, int]] = []
 
     def possible_clues(self, gamemap: Map, inverted_clues: bool = False) -> FrozenSet[Clue]:
 

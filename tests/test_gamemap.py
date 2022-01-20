@@ -60,6 +60,12 @@ class TestMapGeneration(unittest.TestCase):
             x, y = (structure.x, structure.y)
 
             contained_structure = gamemap[x, y].structure
+
+            if contained_structure is None:
+                self.fail(
+                    f"Expected MapTile to contain structure, but got '{gamemap[x, y]}' instead."
+                )
+
             self.assertEqual(
                 structure.color,
                 contained_structure.color,
@@ -74,6 +80,12 @@ class TestMapGeneration(unittest.TestCase):
             x, y = (structure.x, structure.y)
 
             contained_structure = gamemap[x, y].structure
+
+            if contained_structure is None:
+                self.fail(
+                    f"Expected MapTile to contain structure, but got '{gamemap[x, y]}' instead."
+                )
+
             self.assertEqual(
                 structure.shape,
                 contained_structure.shape,

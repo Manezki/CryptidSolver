@@ -1,11 +1,19 @@
 import argparse
 import copy
+from typing import Dict, Optional, Tuple, TypedDict
 
 from cryptidsolver.constant.clues import by_booklet_entry
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 from cryptidsolver.game import Game
 from cryptidsolver import infer
+from cryptidsolver.tile import MapTile
+
+
+class PotentialQuestion(TypedDict):
+    tile: Optional[MapTile]
+    fitness: float
+    results: Dict[str, Tuple[int, int]]
 
 
 def parse_player(stringified: str) -> Player:
@@ -34,20 +42,20 @@ def parse_structure(stringified: str) -> Structure:
         raise ValueError("Structure parameter has to start by color definition")
 
     if stringified.startswith(("green", "white", "black")):
-        color = stringified[:5]
+        color_str = stringified[:5]
     else:
         # Blue
-        color = stringified[:4]
+        color_str = stringified[:4]
 
     shape_lookup = {"ss": "stone", "as": "shack"}
 
-    offset = len(color)
+    offset = len(color_str)
 
     (struct, loc) = (shape_lookup[stringified[offset + 1 : offset + 3]], stringified[offset + 4 :])
-    (x, y) = loc.split(",")
-    (x, y) = (int(x), int(y))
+    (x_str, y_str) = loc.split(",")
+    (x_coord, y_coord) = (int(x_str), int(y_str))
 
-    return Structure(color, struct, x, y)
+    return Structure(color_str, struct, x_coord, y_coord)
 
 
 def question_fitness(n_locations: int, n_combinations: int) -> float:
@@ -80,7 +88,10 @@ if __name__ == "__main__":
         type=str,
         nargs="+",
         required=True,
-        help="Ordered players as '[@](color)_(clue alphabet)(clue number)' with @ for acting player",
+        help=(
+            "Ordered players as '[@](color)_(clue alphabet)(clue number)'"
+            " with @ for acting player"
+        ),
     )
     parser.add_argument(
         "--structures",
@@ -111,6 +122,8 @@ if __name__ == "__main__":
 
     game = Game(args.map, players, structures)
 
+    # TODO: Refactor main-loop into a function
+
     while True:
 
         cmd = input().lower().strip()
@@ -118,8 +131,8 @@ if __name__ == "__main__":
         if cmd.startswith("place") and len(cmd.split(" ")) == 4:
 
             try:
-                (_, mapObject, x, y) = cmd.split(" ")
-                (x, y) = (int(x), (int(y)))
+                (_, mapObject, x_str, y_str) = cmd.split(" ")
+                (x, y) = (int(x_str), (int(y_str)))
 
                 if mapObject == "c":
                     action = game.place_cube(x, y)
@@ -135,8 +148,8 @@ if __name__ == "__main__":
 
         elif cmd.startswith("answer") and len(cmd.split(" ")) == 5:
 
-            (_, color, mapObject, x, y) = cmd.split(" ")
-            (x, y) = (int(x), (int(y)))
+            (_, color, mapObject, x_str, y_str) = cmd.split(" ")
+            (x, y) = (int(x_str), (int(y_str)))
 
             try:
                 player_colors = [player.color.lower() for player in game.players]
@@ -147,10 +160,10 @@ if __name__ == "__main__":
                 continue
 
             if mapObject == "c":
-                action = matched_player.cubes.append((x, y))
+                matched_player.cubes.append((x, y))
                 print(f"{matched_player.color} placed cube on {(x, y)}")
             elif mapObject == "d":
-                action = matched_player.disks.append((x, y))
+                matched_player.disks.append((x, y))
                 game.gametick += 1
                 print(f"{matched_player.color} placed cube on {(x, y)}")
             else:
@@ -207,8 +220,8 @@ if __name__ == "__main__":
 
         elif cmd == "location prob":
 
-            possible_locations = game.possible_tiles()
-            possible_locations = sorted(possible_locations.items(), key=lambda x: x[1])
+            possible_locations_unsorted = game.possible_tiles()
+            possible_locations = sorted(possible_locations_unsorted.items(), key=lambda x: x[1])
 
             print("Location probabilities")
             print("---------")
@@ -221,7 +234,9 @@ if __name__ == "__main__":
 
             possible_tiles = game.possible_tiles()
             n_possible_locations = len(possible_tiles.keys())
-            n_possible_combinations = sum(possible_tiles.values())
+            # BUG: possible_tiles.values have been normalized earlier (to probability),
+            # so the sum equals n_possible_locations always
+            n_possible_combinations = round(sum(possible_tiles.values()))
 
             imagined_game = copy.deepcopy(game)
 
@@ -231,13 +246,13 @@ if __name__ == "__main__":
                 if player != imagined_game.current_player()
             ]
 
-            potential_questions = {
+            potential_questions: Dict[Player, PotentialQuestion] = {
                 player: {
                     "tile": None,
                     "fitness": question_fitness(n_possible_locations, n_possible_combinations),
                     "results": {
-                        "locations": n_possible_locations,
-                        "combinations": n_possible_combinations,
+                        "locations": (n_possible_locations, n_possible_locations),
+                        "combinations": (n_possible_locations, n_possible_locations),
                     },
                 }
                 for player in except_current_player
@@ -256,7 +271,7 @@ if __name__ == "__main__":
 
                     after_locations = imagined_game.possible_tiles()
                     n_negative_locations_after = len(after_locations.keys())
-                    n_negative_combinations_after = sum(after_locations.values())
+                    n_negative_combinations_after = round(sum(after_locations.values()))
 
                     player.cubes.remove((tile.x, tile.y))
 
@@ -266,7 +281,7 @@ if __name__ == "__main__":
 
                     after_locations = imagined_game.possible_tiles()
                     n_positive_locations_after = len(after_locations.keys())
-                    n_positive_combinations_after = sum(after_locations.values())
+                    n_positive_combinations_after = round(sum(after_locations.values()))
 
                     player.disks.remove((tile.x, tile.y))
 
@@ -293,6 +308,14 @@ if __name__ == "__main__":
 
             favored_question = max(potential_questions.items(), key=lambda x: x[1]["fitness"])
 
+            if favored_question[1]["tile"] is None:
+                raise AttributeError(
+                    (
+                        "Encountered a question which does "
+                        f"not point to tile. Question: {favored_question}"
+                    )
+                )
+
             print("Question found.")
             print(
                 (
@@ -300,7 +323,6 @@ if __name__ == "__main__":
                     f"y: {favored_question[1]['tile'].y}"
                 )
             )
-            print(favored_question[1]["fitness"], favored_question[1]["results"])
 
         else:
             print(
