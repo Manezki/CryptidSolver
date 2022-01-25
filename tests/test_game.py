@@ -19,13 +19,13 @@ STRUCTURES = [
 class TestCubePlacement(unittest.TestCase):
     def setUp(self) -> None:
         # Redefine for every test as state persists otherwise
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_cube_added_to_player(self) -> None:
 
@@ -55,13 +55,13 @@ class TestCubePlacement(unittest.TestCase):
 class TestAcceptsCube(unittest.TestCase):
     def setUp(self) -> None:
         # Redefine for every test as state persists otherwise
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_rejects_when_cube_present(self) -> None:
 
@@ -80,13 +80,13 @@ class TestAcceptsCube(unittest.TestCase):
 
 class TestDiskPlacement(unittest.TestCase):
     def setUp(self) -> None:
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_disk_added_to_player(self) -> None:
 
@@ -108,13 +108,13 @@ class TestDiskPlacement(unittest.TestCase):
 class TestPossibleTiles(unittest.TestCase):
     def test_known_clues_return_a_single_tile(self) -> None:
 
-        PLAYER_1 = Player("red", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("orange", clues.by_booklet_entry("beta", 79), teamname="beta")
-        PLAYER_3 = Player("purple", clues.by_booklet_entry("epsilon", 28), teamname="epsilon")
+        player_1 = Player("red", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("orange", clues.by_booklet_entry("beta", 79), teamname="beta")
+        player_3 = Player("purple", clues.by_booklet_entry("epsilon", 28), teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
         possible_tiles = game.possible_tiles()
 

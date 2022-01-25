@@ -19,13 +19,13 @@ STRUCTURES = [
 class TestPossibleClues(unittest.TestCase):
     def setUp(self) -> None:
         # Redefine for every test as state persists otherwise
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        self.game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_returns_non_empty_collection(self) -> None:
 
@@ -36,7 +36,7 @@ class TestPossibleClues(unittest.TestCase):
 
     def test_defaults_to_return_all_clues(self) -> None:
 
-        # PLAYER_2 does not have a clue assigned
+        # player_2 does not have a clue assigned
         player = self.game.players[1]
 
         original_collection = clues.CLUE_COLLECTION.difference([clues.THREE_FROM_BLACK])
@@ -56,7 +56,8 @@ class TestPossibleClues(unittest.TestCase):
 
         possible_clues = player.possible_clues(self.game.map)
 
-        # Cube on (1, 1) excludes the following clues: 2 from cougar, 1 from animal, swamp, 1 from swamp
+        # Cube on (1, 1) excludes the following clues:
+        # 2 from cougar, 1 from animal, swamp, 1 from swamp
         original_collection = clues.CLUE_COLLECTION.difference([clues.THREE_FROM_BLACK])
         reduced_collection = original_collection.difference(
             [

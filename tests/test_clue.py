@@ -105,13 +105,13 @@ class TestAcceptedTiles(unittest.TestCase):
 
         # Encountered during manual testing
 
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
         self.assertIn(
             game.map[1, 1],
@@ -123,12 +123,12 @@ class TestAcceptedTiles(unittest.TestCase):
 
         two_from_cougar = deepcopy(clues.TWO_FROM_COUGAR)
 
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
-        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        players = [player_1, player_2, player_3]
+        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
         _ = two_from_cougar.accepted_tiles(game.map)
 
@@ -163,13 +163,13 @@ class TestHashing(unittest.TestCase):
             hash(a), hash(b), msg="Fresh clues with same parameters should be comparable"
         )
 
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
         _ = b.accepted_tiles(game.map)
 
@@ -220,13 +220,13 @@ class TestEquality(unittest.TestCase):
 
         self.assertEqual(a, b, msg="Instances of same clue should evaluate to be equal")
 
-        PLAYER_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
-        PLAYERS = [PLAYER_1, PLAYER_2, PLAYER_3]
+        players = [player_1, player_2, player_3]
 
-        game = Game(MAP_DESCRIPTOR, PLAYERS, STRUCTURES)
+        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
         _ = b.accepted_tiles(game.map)
 
@@ -277,13 +277,13 @@ class TestInvertedClue(unittest.TestCase):
 
     def test_inverted_clue_rejects_associated_tiles(self) -> None:
 
-        PLAYER_1 = Player("red", Clue(1, {"S"}, clue_type="biome", inverted=True), teamname="alpha")
-        PLAYER_2 = Player("cyan", None, teamname="beta")
-        PLAYER_3 = Player("purple", None, teamname="epsilon")
+        player_1 = Player("red", Clue(1, {"S"}, clue_type="biome", inverted=True), teamname="alpha")
+        player_2 = Player("cyan", None, teamname="beta")
+        player_3 = Player("purple", None, teamname="epsilon")
 
         game = Game(
             ["4N", "3N", "6S", "1S", "5S", "2S"],
-            [PLAYER_1, PLAYER_2, PLAYER_3],
+            [player_1, player_2, player_3],
             [
                 Structure("black", "stone", 2, 3),
                 Structure("green", "shack", 4, 1),
