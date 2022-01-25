@@ -304,6 +304,29 @@ class TestInvertedClue(unittest.TestCase):
             msg="'Not 1 from swamp' should reject tile next to swamp",
         )
 
+    def test_bitwise_inversion_creates_clue_comparable_to_manual_creation(self) -> None:
+        """
+        Bitwise negation creates Clue comparable to one created with __init__
+        """
+
+        clue_inverted = Clue(1, {"S"}, clue_type="biome", inverted=True)
+        clue_maybe_inverted = ~Clue(1, {"S"}, clue_type="biome")
+
+        self.assertEqual(
+            clue_inverted,
+            clue_maybe_inverted,
+            msg="Bitwise negation must return a Clue that is equal to __init__ created counterpart",
+        )
+
+        clue_non_inverted = Clue(1, {"S"}, clue_type="biome")
+        clue_maybe_non_inverted = ~Clue(1, {"S"}, clue_type="biome", inverted=True)
+
+        self.assertEqual(
+            clue_non_inverted,
+            clue_maybe_non_inverted,
+            msg="Bitwise negation must return a Clue that is equal to __init__ created counterpart",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

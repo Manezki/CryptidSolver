@@ -57,6 +57,9 @@ class Clue:
             and self.inverted == other.inverted
         )
 
+    def __invert__(self) -> "Clue":
+        return Clue(self.distance, set(self.distance_from), self.clue_type, not self.inverted)
+
     @lru_cache(maxsize=128)
     def accepted_tiles(self, gamemap: Map) -> FrozenSet[MapTile]:
         """
