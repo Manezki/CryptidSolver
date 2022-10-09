@@ -6,7 +6,7 @@
         {
             "label": "Update requirements",
             "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip freeze | grep ^(?!-e ) > requirements.txt",
+            "command": "${command:python.interpreterPath} -m pip freeze | grep -v '^-e' > requirements.txt",
             "windows": {
                 // PowerShell <6.0 does append BOM to the output-file. This confuses git. Use ASCII instead
                 "command": "${command:python.interpreterPath} -m pip freeze | Where-Object { $_ -NotMatch '^-e ' } | Out-File -Encoding ASCII '.\\requirements.txt'"
