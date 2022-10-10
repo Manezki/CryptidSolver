@@ -2,6 +2,9 @@ from cryptidsolver.structure import Structure
 
 
 class _BiomeTile:
+    """
+    Container for map independent hexagon information, such as animal and biome information.
+    """
 
     __slots__ = ("biome", "animal")
 
@@ -23,6 +26,9 @@ class _BiomeTile:
 
 
 class MapTile(_BiomeTile):
+    """
+    Container for map specific hexagon information, including the coordinates.
+    """
 
     __slots__ = ("x", "y", "structure")
 

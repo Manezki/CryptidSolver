@@ -10,6 +10,12 @@ from cryptidsolver.clue import Clue
 
 
 class Game:
+    """
+    Maintainer for gamestate as a whole.
+    Delegates the player turns and map changes, and maintains
+    track of the player turns.
+    """
+
     def __init__(
         self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]
     ) -> None:

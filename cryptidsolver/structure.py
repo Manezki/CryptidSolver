@@ -1,4 +1,7 @@
 class Structure:
+    """
+    Container for the structure related data.
+    """
 
     __slots__ = ("color", "shape", "x", "y")
 
