@@ -1,16 +1,17 @@
 [build-system]
+# Version 64 adds support for editable installations.
 requires = ["setuptools >= 64.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "cryptidsolver"
-version = "0.2.2"
+version = "0.3.0"
 description = "Solver for Cryptid boardgame"
 authors = [
     {name = "Janne Holopainen", email = "manezki@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.6"
+requires-python = ">=3.10"
 dependencies = [
 ]
 
