@@ -27,7 +27,9 @@
             "windows": {
                 "command": "${command:python.interpreterPath} -m black --line-length=100 $(git ls-files '*.py')",
             },
-            "dependsOn": ["Installation"],
+            "dependsOn": [
+                "Installation"
+            ],
         },
         {
             "label": "Linting",
@@ -36,7 +38,9 @@
             "windows": {
                 "command": "${command:python.interpreterPath} -m pylint --rcfile=.pylintrc $(git ls-files '*.py')",
             },
-            "dependsOn": ["Autoformat using Black"],
+            "dependsOn": [
+                "Autoformat using Black"
+            ],
         },
         {
             "label": "MyPy type-checking",
@@ -45,7 +49,9 @@
             "windows": {
                 "command": "${command:python.interpreterPath} -m mypy $(git ls-files '*.py')",
             },
-            "dependsOn": ["Installation"],
+            "dependsOn": [
+                "Installation"
+            ],
         },
         {
             "label": "Unit testing",
@@ -54,12 +60,19 @@
             "windows": {
                 "command": "${command:python.interpreterPath} -m tox .",
             },
-            "dependsOn": ["Installation"],
+            "dependsOn": [
+                "Installation"
+            ],
         },
         {
             "label": "Local build",
             "type": "shell",
-            "dependsOn": ["Unit testing", "Update requirements", "Linting", "MyPy type-checking"],
+            "dependsOn": [
+                "Unit testing",
+                "Update requirements",
+                "Linting",
+                "MyPy type-checking"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
