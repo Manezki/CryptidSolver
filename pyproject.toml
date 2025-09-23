@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools >= 64.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cryptidsolver"
+version = "0.2.2"
+description = "Solver for Cryptid boardgame"
+authors = [
+    {name = "Janne Holopainen", email = "manezki@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.6"
+dependencies = [
+]
+
+[tool.setuptools]
+packages = ["cryptidsolver"]
