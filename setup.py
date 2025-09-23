@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="cryptidsolver",
-    version="0.2.1",
+    version="0.2.2",
     description="Solver for Cryptid boardgame",
     python_required=">=3.6",
     install_requires=[],

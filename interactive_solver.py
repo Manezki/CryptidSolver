@@ -71,7 +71,7 @@ def question_fitness(n_locations: int, n_combinations: int) -> float:
     if n_combinations == 0:
         return -9999
 
-    return (-n_locations + 1) * (n_combinations ** 0.5)
+    return (-n_locations + 1) * (n_combinations**0.5)
 
 
 if __name__ == "__main__":
