@@ -1,3 +1,5 @@
+from typing import Optional
+
 from cryptidsolver.structure import Structure
 
 
@@ -8,7 +10,7 @@ class _BiomeTile:
 
     __slots__ = ("biome", "animal")
 
-    def __init__(self, biome: str, animal: str = None) -> None:
+    def __init__(self, biome: str, animal: Optional[str] = None) -> None:
         self.biome = biome
         self.animal = animal
 
@@ -33,7 +35,12 @@ class MapTile(_BiomeTile):
     __slots__ = ("x", "y", "structure")
 
     def __init__(
-        self, biome: str, x: int, y: int, animal: str = None, structure: Structure = None
+        self,
+        biome: str,
+        x: int,
+        y: int,
+        animal: Optional[str] = None,
+        structure: Optional[Structure] = None,
     ) -> None:
 
         assert isinstance(x, int)
@@ -44,7 +51,9 @@ class MapTile(_BiomeTile):
         self.structure = structure
 
     @classmethod
-    def _from_BiomeTile(cls, biometile: _BiomeTile, x: int, y: int, structure: Structure = None):
+    def _from_BiomeTile(
+        cls, biometile: _BiomeTile, x: int, y: int, structure: Optional[Structure] = None
+    ):
         return cls(biometile.biome, x, y, animal=biometile.animal, structure=structure)
 
     def has_shack(self) -> bool:
