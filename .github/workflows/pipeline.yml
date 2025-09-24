@@ -1,9 +1,7 @@
 name: Build pipeline
 
 on:
-  push:
-    branch:
-      - master
+  push: {}
 
 jobs:
   Testing:
