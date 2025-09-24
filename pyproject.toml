@@ -16,4 +16,7 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["cryptidsolver"]
+packages = [
+    "cryptidsolver",
+    "cryptidsolver.constant"
+]
