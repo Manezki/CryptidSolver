@@ -4,15 +4,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Update requirements",
-            "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip freeze | grep -v '^-e' > requirements.txt",
-            "windows": {
-                // PowerShell <6.0 does append BOM to the output-file. This confuses git. Use ASCII instead
-                "command": "${command:python.interpreterPath} -m pip freeze | Where-Object { $_ -NotMatch '^-e ' } | Out-File -Encoding ASCII '.\\requirements.txt'"
-            },
-        },
-        {
             "label": "Installation",
             "type": "shell",
             "command": "${config:python.pythonPath} -m pip install -e .",
@@ -69,7 +60,6 @@
             "type": "shell",
             "dependsOn": [
                 "Unit testing",
-                "Update requirements",
                 "Linting",
                 "MyPy type-checking"
             ],
