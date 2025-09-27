@@ -1,5 +1,3 @@
-from typing import Optional
-
 from cryptidsolver.structure import Structure
 
 
@@ -8,9 +6,9 @@ class _BiomeTile:
     Container for map independent hexagon information, such as animal and biome information.
     """
 
-    __slots__ = ("biome", "animal")
+    __slots__ = ("animal", "biome")
 
-    def __init__(self, biome: str, animal: Optional[str] = None) -> None:
+    def __init__(self, biome: str, animal: str | None = None) -> None:
         self.biome = biome
         self.animal = animal
 
@@ -32,17 +30,16 @@ class MapTile(_BiomeTile):
     Container for map specific hexagon information, including the coordinates.
     """
 
-    __slots__ = ("x", "y", "structure")
+    __slots__ = ("structure", "x", "y")
 
     def __init__(
         self,
         biome: str,
         x: int,
         y: int,
-        animal: Optional[str] = None,
-        structure: Optional[Structure] = None,
+        animal: str | None = None,
+        structure: Structure | None = None,
     ) -> None:
-
         assert isinstance(x, int)
         assert isinstance(y, int)
         super().__init__(biome, animal)
@@ -52,9 +49,15 @@ class MapTile(_BiomeTile):
 
     @classmethod
     def _from_BiomeTile(
-        cls, biometile: _BiomeTile, x: int, y: int, structure: Optional[Structure] = None
+        cls,
+        biometile: _BiomeTile,
+        x: int,
+        y: int,
+        structure: Structure | None = None,
     ):
-        return cls(biometile.biome, x, y, animal=biometile.animal, structure=structure)
+        return cls(
+            biometile.biome, x, y, animal=biometile.animal, structure=structure
+        )
 
     def has_shack(self) -> bool:
         if self.structure is None:
@@ -72,16 +75,15 @@ class MapTile(_BiomeTile):
         return hash((self.x, self.y))
 
     def __repr__(self) -> str:
-
         coordinates = (self.x, self.y)
 
         if self.animal is not None and self.structure is not None:
-            return f"{coordinates} - {self.biome} with {self.animal} and {str(self.structure)}"
+            return f"{coordinates} - {self.biome} with {self.animal} and {self.structure!s}"
 
         if self.animal is not None:
             return f"{coordinates} - {self.biome} with {self.animal}"
 
         if self.structure is not None:
-            return f"{coordinates} - {self.biome} with {str(self.structure)}"
+            return f"{coordinates} - {self.biome} with {self.structure!s}"
 
         return f"{coordinates} - {self.biome}"

@@ -1,11 +1,11 @@
 import unittest
 from copy import deepcopy
 
+from cryptidsolver.clue import Clue
 from cryptidsolver.constant import clues
 from cryptidsolver.game import Game
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
-from cryptidsolver.clue import Clue
 
 MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
 STRUCTURES = [
@@ -85,11 +85,12 @@ class TestAcceptedTiles(unittest.TestCase):
         }
 
     def test_accepted_tiles_have_matching_coordinates(self) -> None:
-
         if self.game.players[0].clue is None:
             self.fail("Test requires player 1 to have a clue defined")
 
-        accepted_tiles = self.game.players[0].clue.accepted_tiles(self.game.map)
+        accepted_tiles = self.game.players[0].clue.accepted_tiles(
+            self.game.map
+        )
 
         for tile in accepted_tiles:
             self.assertIn(
@@ -102,10 +103,11 @@ class TestAcceptedTiles(unittest.TestCase):
             )
 
     def test_cougar_clue_accepts_tile_next_to_cougar_zone(self) -> None:
-
         # Encountered during manual testing
 
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -120,10 +122,11 @@ class TestAcceptedTiles(unittest.TestCase):
         )
 
     def test_repeated_calls_are_cached(self) -> None:
-
         two_from_cougar = deepcopy(clues.TWO_FROM_COUGAR)
 
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -151,19 +154,24 @@ class TestHashing(unittest.TestCase):
         b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
 
         self.assertEqual(
-            hash(a), hash(b), msg="Fresh clues with same parameters should be comparable"
+            hash(a),
+            hash(b),
+            msg="Fresh clues with same parameters should be comparable",
         )
 
     def test_accepted_tiles_maintains_hash(self) -> None:
-
         a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
         b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
 
         self.assertEqual(
-            hash(a), hash(b), msg="Fresh clues with same parameters should be comparable"
+            hash(a),
+            hash(b),
+            msg="Fresh clues with same parameters should be comparable",
         )
 
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -174,11 +182,12 @@ class TestHashing(unittest.TestCase):
         _ = b.accepted_tiles(game.map)
 
         self.assertEqual(
-            hash(a), hash(b), msg="Invoking class methods should not change the hash of a clue"
+            hash(a),
+            hash(b),
+            msg="Invoking class methods should not change the hash of a clue",
         )
 
     def test_set_unpacking_order_does_not_change_hash(self) -> None:
-
         a = set(["bear", "cougar"])
         b = set(["bear", "cougar"])
 
@@ -186,41 +195,49 @@ class TestHashing(unittest.TestCase):
         tupled_b = (*b,)
 
         i = 0
+        _MAX_UNPACK_ATTEMPTS = 1000
 
         while tupled_a != tupled_b:
-
             b = set(["bear", "cougar"])
             tupled_b = (*b,)
 
             i += 1
 
-            if i >= 1000:
+            if i >= _MAX_UNPACK_ATTEMPTS:
                 self.fail("Did not find sets with different unpacking order")
 
         clue_a = Clue(1, a, clue_type="animal")
         clue_b = Clue(1, b, clue_type="animal")
 
         self.assertEqual(
-            hash(clue_a), hash(clue_b), msg="Clue hash should be independent of set-unpacking order"
+            hash(clue_a),
+            hash(clue_b),
+            msg="Clue hash should be independent of set-unpacking order",
         )
 
 
 class TestEquality(unittest.TestCase):
-    def test_different_instances_of_same_clues_evaluate_to_be_same(self) -> None:
-
+    def test_different_instances_of_same_clues_evaluate_to_be_same(
+        self,
+    ) -> None:
         a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
         b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
 
-        self.assertEqual(a, b, msg="Instances of same clue should evaluate to be equal")
+        self.assertEqual(
+            a, b, msg="Instances of same clue should evaluate to be equal"
+        )
 
     def test_accepted_tiles_comparison(self) -> None:
-
         a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
         b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
 
-        self.assertEqual(a, b, msg="Instances of same clue should evaluate to be equal")
+        self.assertEqual(
+            a, b, msg="Instances of same clue should evaluate to be equal"
+        )
 
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -237,11 +254,12 @@ class TestEquality(unittest.TestCase):
         )
 
     def test_set_creation_order_does_not_change_equality(self) -> None:
-
         a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
         b = Clue(1, set(["cougar", "bear"]), clue_type="animal")
 
-        self.assertEqual(a, b, msg="Order of distance_from set should not change equality")
+        self.assertEqual(
+            a, b, msg="Order of distance_from set should not change equality"
+        )
 
 
 class TestInvertedClue(unittest.TestCase):
@@ -253,7 +271,9 @@ class TestInvertedClue(unittest.TestCase):
         inverted_repr = str(inverted)
 
         self.assertNotEqual(
-            normal_repr, inverted_repr, msg="Inverting a clue should produce a different 'repr'"
+            normal_repr,
+            inverted_repr,
+            msg="Inverting a clue should produce a different 'repr'",
         )
 
     def test_inverting_a_clue_changes_hash(self) -> None:
@@ -264,7 +284,9 @@ class TestInvertedClue(unittest.TestCase):
         inverted_repr = hash(inverted)
 
         self.assertNotEqual(
-            normal_repr, inverted_repr, msg="Inverting a clue should produce a different hash"
+            normal_repr,
+            inverted_repr,
+            msg="Inverting a clue should produce a different hash",
         )
 
     def test_inverted_is_unequal_to_noninverted(self) -> None:
@@ -272,12 +294,17 @@ class TestInvertedClue(unittest.TestCase):
         inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
 
         self.assertNotEqual(
-            normal, inverted, msg="Inverted clue must be UNEQUAL to non-inverted clue"
+            normal,
+            inverted,
+            msg="Inverted clue must be UNEQUAL to non-inverted clue",
         )
 
     def test_inverted_clue_rejects_associated_tiles(self) -> None:
-
-        player_1 = Player("red", Clue(1, {"S"}, clue_type="biome", inverted=True), teamname="alpha")
+        player_1 = Player(
+            "red",
+            Clue(1, {"S"}, clue_type="biome", inverted=True),
+            teamname="alpha",
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -296,7 +323,9 @@ class TestInvertedClue(unittest.TestCase):
             ],
         )
 
-        inverted_one_from_swamp_clue = Clue(1, {"S"}, clue_type="biome", inverted=True)
+        inverted_one_from_swamp_clue = Clue(
+            1, {"S"}, clue_type="biome", inverted=True
+        )
 
         self.assertNotIn(
             game.map[1, 3],
@@ -304,7 +333,9 @@ class TestInvertedClue(unittest.TestCase):
             msg="'Not 1 from swamp' should reject tile next to swamp",
         )
 
-    def test_bitwise_inversion_creates_clue_comparable_to_manual_creation(self) -> None:
+    def test_bitwise_inversion_creates_clue_comparable_to_manual_creation(
+        self,
+    ) -> None:
         """
         Bitwise negation creates Clue comparable to one created with __init__
         """
@@ -319,7 +350,9 @@ class TestInvertedClue(unittest.TestCase):
         )
 
         clue_non_inverted = Clue(1, {"S"}, clue_type="biome")
-        clue_maybe_non_inverted = ~Clue(1, {"S"}, clue_type="biome", inverted=True)
+        clue_maybe_non_inverted = ~Clue(
+            1, {"S"}, clue_type="biome", inverted=True
+        )
 
         self.assertEqual(
             clue_non_inverted,

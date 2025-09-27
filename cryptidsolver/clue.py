@@ -1,8 +1,7 @@
-from typing import Set, FrozenSet
 from functools import lru_cache
 
-from cryptidsolver.tile import MapTile
 from cryptidsolver.gamemap import Map
+from cryptidsolver.tile import MapTile
 
 
 class Clue:
@@ -10,12 +9,12 @@ class Clue:
     Represents a Clue
     """
 
-    __slots__ = ("distance", "distance_from", "clue_type", "inverted")
+    __slots__ = ("clue_type", "distance", "distance_from", "inverted")
 
     def __init__(
         self,
         distance: int,
-        distance_from: Set[str],
+        distance_from: set[str],
         clue_type: str = "biome",
         inverted: bool = False,
     ) -> None:
@@ -42,11 +41,15 @@ class Clue:
 
     def __hash__(self) -> int:
         return hash(
-            (self.distance, *sorted(list(self.distance_from)), self.clue_type, self.inverted)
+            (
+                self.distance,
+                *sorted(list(self.distance_from)),
+                self.clue_type,
+                self.inverted,
+            )
         )
 
     def __eq__(self, other) -> bool:
-
         if not isinstance(other, Clue):
             return False
 
@@ -58,10 +61,15 @@ class Clue:
         )
 
     def __invert__(self) -> "Clue":
-        return Clue(self.distance, set(self.distance_from), self.clue_type, not self.inverted)
+        return Clue(
+            self.distance,
+            set(self.distance_from),
+            self.clue_type,
+            not self.inverted,
+        )
 
     @lru_cache(maxsize=128)
-    def accepted_tiles(self, gamemap: Map) -> FrozenSet[MapTile]:
+    def accepted_tiles(self, gamemap: Map) -> frozenset[MapTile]:
         """
         Infer which tiles are possible for given clue
 
@@ -75,7 +83,6 @@ class Clue:
         accepted_tiles = set()
 
         for tile in gamemap:
-
             x, y = (tile.x, tile.y)
             distanced_tiles = gamemap.tiles_on_distance(x, y, self.distance)
 
@@ -85,19 +92,19 @@ class Clue:
                     for clue_distance_from_tile in distanced_tiles
                 ):
                     accepted_tiles.add(tile)
-            else:
-                if any(
-                    self.__tile_confers_to_clue(clue_distance_from_tile)
-                    for clue_distance_from_tile in distanced_tiles
-                ):
-                    accepted_tiles.add(tile)
+            elif any(
+                self.__tile_confers_to_clue(clue_distance_from_tile)
+                for clue_distance_from_tile in distanced_tiles
+            ):
+                accepted_tiles.add(tile)
 
-        assert len(accepted_tiles) != 0, "Clue should always accept at least a single tile"
+        assert len(accepted_tiles) != 0, (
+            "Clue should always accept at least a single tile"
+        )
 
         return frozenset(accepted_tiles)
 
     def __tile_confers_to_clue(self, tile: MapTile) -> bool:
-
         if self.clue_type == "biome":
             if tile.biome in self.distance_from:
                 return not self.inverted

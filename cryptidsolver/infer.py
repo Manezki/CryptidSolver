@@ -1,17 +1,15 @@
 import copy
 
-from typing import Dict, FrozenSet, Tuple
-
 from cryptidsolver.clue import Clue
-from cryptidsolver.gamemap import Map
-from cryptidsolver.tile import MapTile
-from cryptidsolver.player import Player
 from cryptidsolver.game import Game
+from cryptidsolver.gamemap import Map
+from cryptidsolver.player import Player
+from cryptidsolver.tile import MapTile
 
 
 def possible_clues_for_player(
     gamemap: Map, player: Player, inverted_clues: bool = False
-) -> FrozenSet[Clue]:
+) -> frozenset[Clue]:
     """
     Infer which clues are possible for the given player.
 
@@ -27,8 +25,11 @@ def possible_clues_for_player(
 
 
 def possible_clues_after_cube_placement(
-    gamemap: Map, player: Player, placement: Tuple[int, int], inverted_clues: bool = False
-) -> FrozenSet[Clue]:
+    gamemap: Map,
+    player: Player,
+    placement: tuple[int, int],
+    inverted_clues: bool = False,
+) -> frozenset[Clue]:
     """
     Infer which clues would be possible after a cube placement.
 
@@ -45,12 +46,17 @@ def possible_clues_after_cube_placement(
     imagined_player = copy.deepcopy(player)
     imagined_player.cubes.append(placement)
 
-    return imagined_player.possible_clues(gamemap=gamemap, inverted_clues=inverted_clues)
+    return imagined_player.possible_clues(
+        gamemap=gamemap, inverted_clues=inverted_clues
+    )
 
 
 def possible_clues_after_disk_placement(
-    gamemap: Map, player: Player, placement: Tuple[int, int], inverted_clues: bool = False
-) -> FrozenSet[Clue]:
+    gamemap: Map,
+    player: Player,
+    placement: tuple[int, int],
+    inverted_clues: bool = False,
+) -> frozenset[Clue]:
     """
     Infer which clues would be possible after a disk placement.
 
@@ -67,10 +73,14 @@ def possible_clues_after_disk_placement(
     imagined_player = copy.deepcopy(player)
     imagined_player.disks.append(placement)
 
-    return imagined_player.possible_clues(gamemap=gamemap, inverted_clues=inverted_clues)
+    return imagined_player.possible_clues(
+        gamemap=gamemap, inverted_clues=inverted_clues
+    )
 
 
-def possible_tiles(game: Game, inverted_clues: bool = False) -> Dict[MapTile, float]:
+def possible_tiles(
+    game: Game, inverted_clues: bool = False
+) -> dict[MapTile, float]:
     """
     Infer possible tiles from the clue possible clue combinations.
 

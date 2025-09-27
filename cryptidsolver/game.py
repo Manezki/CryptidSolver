@@ -1,12 +1,11 @@
-import itertools
 import functools
-from typing import Dict, FrozenSet, List, Tuple
+import itertools
 
+from cryptidsolver.clue import Clue
 from cryptidsolver.gamemap import Map
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
 from cryptidsolver.tile import MapTile
-from cryptidsolver.clue import Clue
 
 
 class Game:
@@ -17,7 +16,10 @@ class Game:
     """
 
     def __init__(
-        self, map_descriptor: List[str], ordered_players: List[Player], structures: List[Structure]
+        self,
+        map_descriptor: list[str],
+        ordered_players: list[Player],
+        structures: list[Structure],
     ) -> None:
         self.players = ordered_players
         self.map = Map(map_descriptor, structures)
@@ -53,7 +55,9 @@ class Game:
 
         return True
 
-    def place_cube(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
+    def place_cube(
+        self, x: int, y: int, advance_tick: bool = True
+    ) -> tuple[Player, MapTile]:
         """
         Place a cube for the acting player.
 
@@ -67,7 +71,9 @@ class Game:
         """
 
         if not self.accepts_cube(x, y):
-            raise ValueError("Cubes cannot be placed on tiles with existing cubes")
+            raise ValueError(
+                "Cubes cannot be placed on tiles with existing cubes"
+            )
 
         acting_player = self.current_player()
         acting_player.cubes.append((x, y))
@@ -77,7 +83,9 @@ class Game:
 
         return (acting_player, self.map[x, y])
 
-    def place_disk(self, x: int, y: int, advance_tick: bool = True) -> Tuple[Player, MapTile]:
+    def place_disk(
+        self, x: int, y: int, advance_tick: bool = True
+    ) -> tuple[Player, MapTile]:
         """
         Place a disk for the acting player.
 
@@ -98,7 +106,9 @@ class Game:
 
         return (acting_player, self.map[x, y])
 
-    def possible_tiles(self, inverted_clues: bool = False) -> Dict[MapTile, float]:
+    def possible_tiles(
+        self, inverted_clues: bool = False
+    ) -> dict[MapTile, float]:
         """
         Infer possible tiles from the clue possible clue combinations.
 
@@ -113,7 +123,7 @@ class Game:
         if inverted_clues:
             raise NotImplementedError("Inverse clues not implemented")
 
-        potential_clues: List[FrozenSet[Clue]] = []
+        potential_clues: list[frozenset[Clue]] = []
 
         for player in self.players:
             if player.clue is not None:
@@ -122,12 +132,14 @@ class Game:
             else:
                 potential_clues.append(player.possible_clues(self.map))
 
-        potential_tiles: Dict[MapTile, float] = {}
+        potential_tiles: dict[MapTile, float] = {}
         total = 0
 
         for combination in itertools.product(*potential_clues):
             possible_tiles = functools.reduce(
-                lambda x, y: x & y.accepted_tiles(self.map), combination, set(self.map)
+                lambda x, y: x & y.accepted_tiles(self.map),
+                combination,
+                set(self.map),
             )
             if len(possible_tiles) == 1:
                 tile = possible_tiles.pop()

@@ -1,9 +1,9 @@
 import unittest
 
+from cryptidsolver.constant import clues
 from cryptidsolver.game import Game
 from cryptidsolver.gamemap import Structure
 from cryptidsolver.player import Player
-from cryptidsolver.constant import clues
 
 MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
 STRUCTURES = [
@@ -19,7 +19,9 @@ STRUCTURES = [
 class TestCubePlacement(unittest.TestCase):
     def setUp(self) -> None:
         # Redefine for every test as state persists otherwise
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -28,7 +30,6 @@ class TestCubePlacement(unittest.TestCase):
         self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_cube_added_to_player(self) -> None:
-
         before_placement = len(self.game.players[0].cubes)
 
         # Confers to the players clue
@@ -37,7 +38,6 @@ class TestCubePlacement(unittest.TestCase):
         self.assertEqual(len(self.game.players[0].cubes), before_placement + 1)
 
     def test_gametick_advances(self) -> None:
-
         before_placement = self.game.gametick
 
         self.game.place_cube(1, 1)
@@ -45,17 +45,20 @@ class TestCubePlacement(unittest.TestCase):
         self.assertEqual(self.game.gametick, before_placement + 1)
 
     def test_rejects_placement_when_cube_present(self) -> None:
-
         self.game.place_cube(1, 1)
 
-        with self.assertRaises(ValueError, msg="Cubes cannot be placed on tiles with cubes"):
+        with self.assertRaises(
+            ValueError, msg="Cubes cannot be placed on tiles with cubes"
+        ):
             self.game.place_cube(1, 1)
 
 
 class TestAcceptsCube(unittest.TestCase):
     def setUp(self) -> None:
         # Redefine for every test as state persists otherwise
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -64,23 +67,25 @@ class TestAcceptsCube(unittest.TestCase):
         self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_rejects_when_cube_present(self) -> None:
-
         self.game.place_cube(1, 1)
 
         self.assertFalse(
-            self.game.accepts_cube(1, 1), msg="Cubes cannot be placed on tiles with other cubes"
+            self.game.accepts_cube(1, 1),
+            msg="Cubes cannot be placed on tiles with other cubes",
         )
 
     def test_accepts_when_no_cube_present(self) -> None:
-
         self.assertTrue(
-            self.game.accepts_cube(1, 1), msg="Cubes can be placed on tiles with other cubes"
+            self.game.accepts_cube(1, 1),
+            msg="Cubes can be placed on tiles with other cubes",
         )
 
 
 class TestDiskPlacement(unittest.TestCase):
     def setUp(self) -> None:
-        player_1 = Player("orange", clues.by_booklet_entry("alpha", 2), teamname="alpha")
+        player_1 = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         player_2 = Player("cyan", None, teamname="beta")
         player_3 = Player("purple", None, teamname="epsilon")
 
@@ -89,7 +94,6 @@ class TestDiskPlacement(unittest.TestCase):
         self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
 
     def test_disk_added_to_player(self) -> None:
-
         before_placement = len(self.game.players[0].disks)
 
         self.game.place_disk(1, 1)
@@ -97,7 +101,6 @@ class TestDiskPlacement(unittest.TestCase):
         self.assertEqual(len(self.game.players[0].disks), before_placement + 1)
 
     def test_gametick_advances(self) -> None:
-
         before_placement = self.game.gametick
 
         self.game.place_disk(1, 1)
@@ -107,10 +110,15 @@ class TestDiskPlacement(unittest.TestCase):
 
 class TestPossibleTiles(unittest.TestCase):
     def test_known_clues_return_a_single_tile(self) -> None:
-
-        player_1 = Player("red", clues.by_booklet_entry("alpha", 2), teamname="alpha")
-        player_2 = Player("orange", clues.by_booklet_entry("beta", 79), teamname="beta")
-        player_3 = Player("purple", clues.by_booklet_entry("epsilon", 28), teamname="epsilon")
+        player_1 = Player(
+            "red", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
+        player_2 = Player(
+            "orange", clues.by_booklet_entry("beta", 79), teamname="beta"
+        )
+        player_3 = Player(
+            "purple", clues.by_booklet_entry("epsilon", 28), teamname="epsilon"
+        )
 
         players = [player_1, player_2, player_3]
 

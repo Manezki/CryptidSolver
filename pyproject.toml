@@ -17,11 +17,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black==24.8.0",
     "mypy==1.14.1",
     "pylint==3.2.7",
     "tox==4.25.0",
-    "pytest==8.4.2"
+    "pytest==8.4.2",
+    "ruff==0.13.2"
 ]
 
 [tool.poetry.group.dev]
@@ -32,3 +32,18 @@ packages = [
     "cryptidsolver",
     "cryptidsolver.constant"
 ]
+
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = [
+    "F",    # Pyflakes
+    "W",    # pycodestyle
+    "E",    # pycodestyle
+    "I",    # isort
+    "UP",   # pyupgrade
+    "PL",   # Pylint
+    "RUF",  # Ruff-specific rules
+]
+ignore = ["E501"] # Ruff format takes care of line-too-long

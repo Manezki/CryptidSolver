@@ -1,23 +1,33 @@
 import argparse
 import copy
-from typing import Dict, Optional, Tuple, TypedDict
+from typing import TypedDict
 
+from cryptidsolver import infer
 from cryptidsolver.constant.clues import by_booklet_entry
+from cryptidsolver.constant.limits import _MIN_PLAYERS
+from cryptidsolver.game import Game
 from cryptidsolver.player import Player
 from cryptidsolver.structure import Structure
-from cryptidsolver.game import Game
-from cryptidsolver import infer
 from cryptidsolver.tile import MapTile
+
+_N_ARGUMENTS_ANSWER = 5
+_N_ARGUMENTS_PLACEMENT = 4
 
 
 class PotentialQuestion(TypedDict):
-    tile: Optional[MapTile]
+    tile: MapTile | None
     fitness: float
-    results: Dict[str, Tuple[int, int]]
+    results: dict[str, tuple[int, int]]
 
 
 def parse_player(stringified: str) -> Player:
-    alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
+    alphabet_lookup = {
+        "a": "alpha",
+        "b": "beta",
+        "g": "gamma",
+        "d": "delta",
+        "e": "epsilon",
+    }
 
     if stringified.startswith("@"):
         acting_player = True
@@ -26,7 +36,10 @@ def parse_player(stringified: str) -> Player:
         acting_player = False
 
     color, booklet = stringified.split("_")
-    (booklet_alpha, booklet_num) = (alphabet_lookup[booklet[0].lower()], int(booklet[1:]))
+    (booklet_alpha, booklet_num) = (
+        alphabet_lookup[booklet[0].lower()],
+        int(booklet[1:]),
+    )
 
     if acting_player:
         return Player(color, by_booklet_entry(booklet_alpha, booklet_num))
@@ -35,11 +48,12 @@ def parse_player(stringified: str) -> Player:
 
 
 def parse_structure(stringified: str) -> Structure:
-
     stringified = stringified.lower()
 
     if not stringified.startswith(("green", "white", "black", "blue")):
-        raise ValueError("Structure parameter has to start by color definition")
+        raise ValueError(
+            "Structure parameter has to start by color definition"
+        )
 
     if stringified.startswith(("green", "white", "black")):
         color_str = stringified[:5]
@@ -51,7 +65,10 @@ def parse_structure(stringified: str) -> Structure:
 
     offset = len(color_str)
 
-    (struct, loc) = (shape_lookup[stringified[offset + 1 : offset + 3]], stringified[offset + 4 :])
+    (struct, loc) = (
+        shape_lookup[stringified[offset + 1 : offset + 3]],
+        stringified[offset + 4 :],
+    )
     (x_str, y_str) = loc.split(",")
     (x_coord, y_coord) = (int(x_str), int(y_str))
 
@@ -114,7 +131,9 @@ if __name__ == "__main__":
         ("blue", "shack"),
     ]
 
-    assert len(players) >= 3, "Game should have at least three players"
+    assert len(players) >= _MIN_PLAYERS, (
+        "Game should have at least three players"
+    )
     assert all(
         ms in [(s.color.lower(), s.shape.lower()) for s in structures]
         for ms in __minimal_structures
@@ -125,11 +144,12 @@ if __name__ == "__main__":
     # TODO: Refactor main-loop into a function
 
     while True:
-
         cmd = input().lower().strip()
 
-        if cmd.startswith("place") and len(cmd.split(" ")) == 4:
-
+        if (
+            cmd.startswith("place")
+            and len(cmd.split(" ")) == _N_ARGUMENTS_PLACEMENT
+        ):
             try:
                 (_, mapObject, x_str, y_str) = cmd.split(" ")
                 (x, y) = (int(x_str), (int(y_str)))
@@ -146,17 +166,25 @@ if __name__ == "__main__":
             except ValueError:
                 pass
 
-        elif cmd.startswith("answer") and len(cmd.split(" ")) == 5:
-
+        elif (
+            cmd.startswith("answer")
+            and len(cmd.split(" ")) == _N_ARGUMENTS_ANSWER
+        ):
             (_, color, mapObject, x_str, y_str) = cmd.split(" ")
             (x, y) = (int(x_str), (int(y_str)))
 
             try:
-                player_colors = [player.color.lower() for player in game.players]
-                matched_player = game.players[player_colors.index(color.lower())]
+                player_colors = [
+                    player.color.lower() for player in game.players
+                ]
+                matched_player = game.players[
+                    player_colors.index(color.lower())
+                ]
 
             except ValueError:
-                print(f"Player with color '{color}' was not found. Please check your command")
+                print(
+                    f"Player with color '{color}' was not found. Please check your command"
+                )
                 continue
 
             if mapObject == "c":
@@ -168,10 +196,8 @@ if __name__ == "__main__":
                 print(f"{matched_player.color} placed cube on {(x, y)}")
             else:
                 print(
-                    (
-                        f"Placed object '{mapObject}' was not "
-                        "cube (c) or disk (d). Pease check your command"
-                    )
+                    f"Placed object '{mapObject}' was not "
+                    "cube (c) or disk (d). Pease check your command"
                 )
 
         elif cmd == "possible clues":
@@ -188,7 +214,6 @@ if __name__ == "__main__":
                 print("")
 
         elif cmd == "infer cube placement":
-
             player = game.current_player()
             before_placement = player.possible_clues(game.map)
 
@@ -196,12 +221,13 @@ if __name__ == "__main__":
 
             for tile in game.map:
                 if game.accepts_cube(tile.x, tile.y):
-
                     # Does not account for impossible clues - that is cannot produce
                     # clue-combination that singles out a tile.
 
-                    clues_after_placement = infer.possible_clues_after_cube_placement(
-                        game.map, player, (tile.x, tile.y)
+                    clues_after_placement = (
+                        infer.possible_clues_after_cube_placement(
+                            game.map, player, (tile.x, tile.y)
+                        )
                     )
 
                     placement_reduces_clues = len(
@@ -209,27 +235,29 @@ if __name__ == "__main__":
                     )
                     placement_alternatives[tile] = placement_reduces_clues
 
-            minimum_reveal = sorted(placement_alternatives.items(), key=lambda x: x[1])[0]
+            minimum_reveal = sorted(
+                placement_alternatives.items(), key=lambda x: x[1]
+            )[0]
 
             print(
-                (
-                    f"Place cube on x:{minimum_reveal[0].x} y:{minimum_reveal[0].y} "
-                    f"to reduce {minimum_reveal[1]} clues"
-                )
+                f"Place cube on x:{minimum_reveal[0].x} y:{minimum_reveal[0].y} "
+                f"to reduce {minimum_reveal[1]} clues"
             )
 
         elif cmd == "location prob":
-
             possible_locations_unsorted = game.possible_tiles()
-            possible_locations = sorted(possible_locations_unsorted.items(), key=lambda x: x[1])
+            possible_locations = sorted(
+                possible_locations_unsorted.items(), key=lambda x: x[1]
+            )
 
             print("Location probabilities")
             print("---------")
             for location, probability in possible_locations:
-                print(f"Tile x:{location.x} y:{location.y} has probability of {probability}")
+                print(
+                    f"Tile x:{location.x} y:{location.y} has probability of {probability}"
+                )
 
         elif cmd == "question":
-
             print()
 
             possible_tiles = game.possible_tiles()
@@ -246,32 +274,40 @@ if __name__ == "__main__":
                 if player != imagined_game.current_player()
             ]
 
-            potential_questions: Dict[Player, PotentialQuestion] = {
+            potential_questions: dict[Player, PotentialQuestion] = {
                 player: {
                     "tile": None,
-                    "fitness": question_fitness(n_possible_locations, n_possible_combinations),
+                    "fitness": question_fitness(
+                        n_possible_locations, n_possible_combinations
+                    ),
                     "results": {
-                        "locations": (n_possible_locations, n_possible_locations),
-                        "combinations": (n_possible_locations, n_possible_locations),
+                        "locations": (
+                            n_possible_locations,
+                            n_possible_locations,
+                        ),
+                        "combinations": (
+                            n_possible_locations,
+                            n_possible_locations,
+                        ),
                     },
                 }
                 for player in except_current_player
             }
 
             for player in except_current_player:
-
                 # No point asking questions from players with known clues, i.e. acting players
                 if player.clue is not None:
                     continue
 
                 for tile in imagined_game.map:
-
                     # imagine cube placement
                     player.cubes.append((tile.x, tile.y))
 
                     after_locations = imagined_game.possible_tiles()
                     n_negative_locations_after = len(after_locations.keys())
-                    n_negative_combinations_after = round(sum(after_locations.values()))
+                    n_negative_combinations_after = round(
+                        sum(after_locations.values())
+                    )
 
                     player.cubes.remove((tile.x, tile.y))
 
@@ -281,20 +317,29 @@ if __name__ == "__main__":
 
                     after_locations = imagined_game.possible_tiles()
                     n_positive_locations_after = len(after_locations.keys())
-                    n_positive_combinations_after = round(sum(after_locations.values()))
+                    n_positive_combinations_after = round(
+                        sum(after_locations.values())
+                    )
 
                     player.disks.remove((tile.x, tile.y))
 
                     fitness = (
-                        question_fitness(n_negative_locations_after, n_negative_combinations_after)
+                        question_fitness(
+                            n_negative_locations_after,
+                            n_negative_combinations_after,
+                        )
                         + question_fitness(
-                            n_positive_locations_after, n_positive_combinations_after
+                            n_positive_locations_after,
+                            n_positive_combinations_after,
                         )
                     ) / 2
 
                     if fitness >= potential_questions[player]["fitness"]:
                         results = {
-                            "locations": (n_positive_locations_after, n_negative_locations_after),
+                            "locations": (
+                                n_positive_locations_after,
+                                n_negative_locations_after,
+                            ),
                             "combinations": (
                                 n_positive_combinations_after,
                                 n_negative_combinations_after,
@@ -306,22 +351,20 @@ if __name__ == "__main__":
                             "results": results,
                         }
 
-            favored_question = max(potential_questions.items(), key=lambda x: x[1]["fitness"])
+            favored_question = max(
+                potential_questions.items(), key=lambda x: x[1]["fitness"]
+            )
 
             if favored_question[1]["tile"] is None:
                 raise AttributeError(
-                    (
-                        "Encountered a question which does "
-                        f"not point to tile. Question: {favored_question}"
-                    )
+                    "Encountered a question which does "
+                    f"not point to tile. Question: {favored_question}"
                 )
 
             print("Question found.")
             print(
-                (
-                    f"Ask player: {favored_question[0]} about x: {favored_question[1]['tile'].x} "
-                    f"y: {favored_question[1]['tile'].y}"
-                )
+                f"Ask player: {favored_question[0]} about x: {favored_question[1]['tile'].x} "
+                f"y: {favored_question[1]['tile'].y}"
             )
 
         else:

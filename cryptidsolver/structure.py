@@ -1,3 +1,6 @@
+from cryptidsolver.constant.limits import _MAP_MAX_X, _MAP_MAX_Y
+
+
 class Structure:
     """
     Container for the structure related data.
@@ -6,18 +9,23 @@ class Structure:
     __slots__ = ("color", "shape", "x", "y")
 
     def __init__(self, color: str, shape: str, x: int, y: int) -> None:
-
         if x < 1 or y < 1:
             raise ValueError("Coordinates have to be strictly positive")
 
-        if x > 12:
-            raise ValueError("X coordinate cannot be higher than 12 (map-limit)")
+        if x > _MAP_MAX_X:
+            raise ValueError(
+                f"X coordinate cannot be higher than {_MAP_MAX_X} (map-limit)"
+            )
 
-        if y > 9:
-            raise ValueError("Y coordinate cannot be higher than 9 (map-limit)")
+        if y > _MAP_MAX_Y:
+            raise ValueError(
+                f"Y coordinate cannot be higher than {_MAP_MAX_Y} (map-limit)"
+            )
 
         if color.lower() not in ["blue", "green", "white", "black"]:
-            raise ValueError("Unrecognized color. Accepted ones are: Blue, Green, White, Black")
+            raise ValueError(
+                "Unrecognized color. Accepted ones are: Blue, Green, White, Black"
+            )
 
         self.color = color.lower()
         self.shape = shape.lower()

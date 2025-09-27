@@ -1,4 +1,5 @@
 import copy
+
 from cryptidsolver.clue import Clue
 
 # TODO Is there a way to provide new Clue instance on every call
@@ -558,17 +559,19 @@ __CLUE_LOOKUP = {
 
 
 def by_booklet_entry(alphabet: str, number: int) -> Clue:
-
     # TODO Refactor: Move to Clue classmethod
     # TODO QOL: Accept alphabet letters
 
     # alphabet_lookup = {"a": "alpha", "b": "beta", "g": "gamma", "d": "delta", "e": "epsilon"}
     # alphabet = alphabet_lookup.get(alphabet.lower(), alphabet.lower())
 
-    assert alphabet.lower() in __CLUE_LOOKUP, f"Alphabet must be in {list(__CLUE_LOOKUP.keys())}"
+    assert alphabet.lower() in __CLUE_LOOKUP, (
+        f"Alphabet must be in {list(__CLUE_LOOKUP.keys())}"
+    )
+
     assert number in __CLUE_LOOKUP["alpha"].keys(), (
-        f"Number should in range {list(__CLUE_LOOKUP['alpha'].keys())[0]}"
-        f"...{list(__CLUE_LOOKUP['alpha'].keys())[-1]}"
+        f"Number should in range {min(__CLUE_LOOKUP['alpha'].keys())}"
+        f"...{max(__CLUE_LOOKUP['alpha'].keys())}"
     )
 
     clue = __CLUE_LOOKUP[alphabet.lower()][number]

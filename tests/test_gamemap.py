@@ -11,24 +11,28 @@ STRUCTURES = [
     Structure("blue", "stone", 9, 1),
     Structure("blue", "shack", 7, 4),
 ]
-SAMPLE_LOCATIONS = [(2, 6, "F"), (3, 5, "D"), (3, 6, "W"), (4, 6, "W"), (9, 8, "S"), (8, 4, "F")]
+SAMPLE_LOCATIONS = [
+    (2, 6, "F"),
+    (3, 5, "D"),
+    (3, 6, "W"),
+    (4, 6, "W"),
+    (9, 8, "S"),
+    (8, 4, "F"),
+]
 
 
 class TestMapGeneration(unittest.TestCase):
     def test_succesfully_generate_map(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
         self.assertIsInstance(gamemap, Map)
 
     def test_no_duplicate_coordinates(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
         coordinates = [(tile.x, tile.y) for tile in gamemap]
 
         self.assertEqual(len(coordinates), len(set(coordinates)))
 
     def test_extreme_coordinates_included(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
         coordinates = [(tile.x, tile.y) for tile in gamemap]
 
@@ -38,14 +42,15 @@ class TestMapGeneration(unittest.TestCase):
         self.assertIn((12, 9), coordinates)
 
     def test_structures_assigned_to_correct_coordinates(self) -> None:
-
         # Does not guarantee the correct structure type nor color
 
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
         for structure in STRUCTURES:
             x, y = (structure.x, structure.y)
 
-            contains_structure = gamemap[x, y].has_shack() or gamemap[x, y].has_stone()
+            contains_structure = (
+                gamemap[x, y].has_shack() or gamemap[x, y].has_stone()
+            )
 
             self.assertTrue(
                 contains_structure,
@@ -53,7 +58,6 @@ class TestMapGeneration(unittest.TestCase):
             )
 
     def test_structure_color_matching(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
 
         for structure in STRUCTURES:
@@ -73,7 +77,6 @@ class TestMapGeneration(unittest.TestCase):
             )
 
     def test_structure_type_matching(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
 
         for structure in STRUCTURES:
@@ -93,16 +96,16 @@ class TestMapGeneration(unittest.TestCase):
             )
 
     def test_coordinate_biome(self) -> None:
-
         gamemap = Map(MAP_DESCRIPTOR, STRUCTURES)
 
         for x, y, biome in SAMPLE_LOCATIONS:
-
             tile = gamemap[x, y]
             self.assertEqual(
                 tile.biome,
                 biome,
-                (f"The generated tiles did not match hand-checked tile: {(x, y)}"),
+                (
+                    f"The generated tiles did not match hand-checked tile: {(x, y)}"
+                ),
             )
 
 

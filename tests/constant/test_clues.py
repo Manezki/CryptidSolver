@@ -4,7 +4,6 @@ from cryptidsolver.constant.clues import by_booklet_entry
 
 
 class TestClueLookup(unittest.TestCase):
-
     # Number 2 is non-inverted clue for every alphabet
 
     def test_rejects_incorrect_alphabet(self) -> None:
@@ -15,15 +14,14 @@ class TestClueLookup(unittest.TestCase):
             by_booklet_entry("A", 2)
 
     def test_rejects_incorrect_number(self) -> None:
-
         for number in [-1, 0, 97]:
             with self.assertRaises(
-                AssertionError, msg="Should only accept numbers in range 1...96"
+                AssertionError,
+                msg="Should only accept numbers in range 1...96",
             ):
                 by_booklet_entry("alpha", number)
 
     def test_accepts_proper_alphabets(self) -> None:
-
         alphabets = ["alpha", "beta", "gamma", "delta", "epsilon"]
 
         for alpha in alphabets:
@@ -33,7 +31,6 @@ class TestClueLookup(unittest.TestCase):
                 self.fail(f"Proper alphabet {alpha} was not accepted")
 
     def test_accepts_proper_number_as_argument(self) -> None:
-
         for number in range(1, 97, 1):
             try:
                 by_booklet_entry("alpha", number)
@@ -44,8 +41,9 @@ class TestClueLookup(unittest.TestCase):
                     self.fail(f"Proper number {number} was not accepted")
 
     def test_fails_on_inverted_clues(self) -> None:
-
-        with self.assertRaises(NotImplementedError, msg="Should fail on inverted clues"):
+        with self.assertRaises(
+            NotImplementedError, msg="Should fail on inverted clues"
+        ):
             # Epsilon 4 is clue: 'not_forest/mountain'
             by_booklet_entry("epsilon", 4)
 
