@@ -215,6 +215,11 @@ if __name__ == "__main__":
 
         elif cmd == "infer cube placement":
             player = game.current_player()
+            if player.clue is None:
+                print(
+                    "'Infer cube placement' not supported for non-controlled player."
+                )
+                continue
             before_placement = player.possible_clues(game.map)
 
             placement_alternatives = {}
