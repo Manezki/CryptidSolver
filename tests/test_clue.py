@@ -84,6 +84,14 @@ class TestAcceptedTiles(unittest.TestCase):
             (12, 6),
         }
 
+    def test_accepted_tiles_does_not_contain_tile_refused_by_the_clue(
+        self,
+    ) -> None:
+        accepted_tiles = clues.FOREST_OR_MOUNTAIN.accepted_tiles(self.game.map)
+
+        # Self.game.map has desert with bear on 1,1
+        self.assertNotIn(self.game.map[1, 1], accepted_tiles)
+
     def test_accepted_tiles_have_matching_coordinates(self) -> None:
         if self.game.players[0].clue is None:
             self.fail("Test requires player 1 to have a clue defined")
