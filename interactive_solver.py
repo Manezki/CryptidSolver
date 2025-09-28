@@ -223,8 +223,14 @@ if __name__ == "__main__":
             before_placement = player.possible_clues(game.map)
 
             placement_alternatives = {}
+            clue_accepts = player.clue.accepted_tiles(game.map)
 
             for tile in game.map:
+                # If players clue would accept monster on the tile, then we cannot
+                # place a cube on it.
+                if tile in clue_accepts:
+                    continue
+
                 if game.accepts_cube(tile.x, tile.y):
                     # Does not account for impossible clues - that is cannot produce
                     # clue-combination that singles out a tile.
