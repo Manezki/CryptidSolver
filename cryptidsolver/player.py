@@ -29,7 +29,7 @@ class Player:
                 "Missing implementation for inverted clues"
             )
         else:
-            clues = CLUE_COLLECTION.difference([THREE_FROM_BLACK])
+            clues = CLUE_COLLECTION.difference({THREE_FROM_BLACK})
 
         for clue in clues:
             # Clue is possible only if it accepts all disk locations and refuses all cube locations

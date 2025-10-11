@@ -40,7 +40,7 @@ class TestPossibleClues(unittest.TestCase):
         player = self.game.players[1]
 
         original_collection = clues.CLUE_COLLECTION.difference(
-            [clues.THREE_FROM_BLACK]
+            {clues.THREE_FROM_BLACK}
         )
         possible_clues = player.possible_clues(self.game.map)
 
@@ -60,10 +60,10 @@ class TestPossibleClues(unittest.TestCase):
         # Cube on (1, 1) excludes the following clues:
         # 2 from cougar, 1 from animal, swamp, 1 from swamp
         original_collection = clues.CLUE_COLLECTION.difference(
-            [clues.THREE_FROM_BLACK]
+            {clues.THREE_FROM_BLACK}
         )
         reduced_collection = original_collection.difference(
-            [
+            {
                 clues.FOREST_OR_SWAMP,
                 clues.DESERT_OR_SWAMP,
                 clues.WATER_OR_SWAMP,
@@ -71,7 +71,7 @@ class TestPossibleClues(unittest.TestCase):
                 clues.ONE_FROM_SWAMP,
                 clues.ONE_FROM_ANIMAL,
                 clues.TWO_FROM_COUGAR,
-            ]
+            }
         )
 
         self.assertSetEqual(
