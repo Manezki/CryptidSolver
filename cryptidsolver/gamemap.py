@@ -138,8 +138,8 @@ class Map:
         """
         neighbours = set()
 
-        for row in [x - 1, x, x + 1]:
-            for col in [y - 1, y, y + 1]:
+        for row in (x - 1, x, x + 1):
+            for col in (y - 1, y, y + 1):
                 # Odd rows have left & right neighbours in y-1 and y.
                 if x % 2 == 1 and col == y + 1 and row != x:
                     continue

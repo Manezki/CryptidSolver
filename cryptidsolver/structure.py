@@ -22,7 +22,7 @@ class Structure:
                 f"Y coordinate cannot be higher than {_MAP_MAX_Y} (map-limit)"
             )
 
-        if color.lower() not in ["blue", "green", "white", "black"]:
+        if color.lower() not in ("blue", "green", "white", "black"):
             raise ValueError(
                 "Unrecognized color. Accepted ones are: Blue, Green, White, Black"
             )

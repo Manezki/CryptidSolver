@@ -128,7 +128,7 @@ class Game:
         for player in self.players:
             if player.clue is not None:
                 # Add known clues
-                potential_clues.append(frozenset([player.clue]))
+                potential_clues.append(frozenset((player.clue,)))
             else:
                 potential_clues.append(player.possible_clues(self.map))
 

@@ -14,7 +14,7 @@ class TestClueLookup(unittest.TestCase):
             by_booklet_entry("A", 2)
 
     def test_rejects_incorrect_number(self) -> None:
-        for number in [-1, 0, 97]:
+        for number in (-1, 0, 97):
             with self.assertRaises(
                 AssertionError,
                 msg="Should only accept numbers in range 1...96",
@@ -22,7 +22,7 @@ class TestClueLookup(unittest.TestCase):
                 by_booklet_entry("alpha", number)
 
     def test_accepts_proper_alphabets(self) -> None:
-        alphabets = ["alpha", "beta", "gamma", "delta", "epsilon"]
+        alphabets = ("alpha", "beta", "gamma", "delta", "epsilon")
 
         for alpha in alphabets:
             try:
