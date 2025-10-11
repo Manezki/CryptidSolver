@@ -4,65 +4,63 @@ from cryptidsolver.clue import Clue
 
 # TODO Is there a way to provide new Clue instance on every call
 
-FOREST_OR_DESERT = Clue(0, set(["F", "D"]))
-FOREST_OR_WATER = Clue(0, set(["F", "W"]))
-FOREST_OR_SWAMP = Clue(0, set(["F", "S"]))
-FOREST_OR_MOUNTAIN = Clue(0, set(["F", "M"]))
-DESERT_OR_WATER = Clue(0, set(["D", "W"]))
-DESERT_OR_SWAMP = Clue(0, set(["D", "S"]))
-DESERT_OR_MOUNTAIN = Clue(0, set(["D", "M"]))
-WATER_OR_SWAMP = Clue(0, set(["W", "S"]))
-WATER_OR_MOUNTAIN = Clue(0, set(["W", "M"]))
-SWAMP_OR_MOUNTAIN = Clue(0, set(["S", "M"]))
+FOREST_OR_DESERT = Clue(0, {"F", "D"})
+FOREST_OR_WATER = Clue(0, {"F", "W"})
+FOREST_OR_SWAMP = Clue(0, {"F", "S"})
+FOREST_OR_MOUNTAIN = Clue(0, {"F", "M"})
+DESERT_OR_WATER = Clue(0, {"D", "W"})
+DESERT_OR_SWAMP = Clue(0, {"D", "S"})
+DESERT_OR_MOUNTAIN = Clue(0, {"D", "M"})
+WATER_OR_SWAMP = Clue(0, {"W", "S"})
+WATER_OR_MOUNTAIN = Clue(0, {"W", "M"})
+SWAMP_OR_MOUNTAIN = Clue(0, {"S", "M"})
 
-ONE_FROM_FOREST = Clue(1, set(["F"]))
-ONE_FROM_DESERT = Clue(1, set(["D"]))
-ONE_FROM_SWAMP = Clue(1, set(["S"]))
-ONE_FROM_MOUNTAIN = Clue(1, set(["M"]))
-ONE_FROM_WATER = Clue(1, set(["W"]))
-ONE_FROM_ANIMAL = Clue(1, set(["cougar", "bear"]), clue_type="animal")
+ONE_FROM_FOREST = Clue(1, {"F"})
+ONE_FROM_DESERT = Clue(1, {"D"})
+ONE_FROM_SWAMP = Clue(1, {"S"})
+ONE_FROM_MOUNTAIN = Clue(1, {"M"})
+ONE_FROM_WATER = Clue(1, {"W"})
+ONE_FROM_ANIMAL = Clue(1, {"cougar", "bear"}, clue_type="animal")
 
-TWO_FROM_STANDING_STONE = Clue(2, set(["stone"]), clue_type="structure")
-TWO_FROM_ABANDONED_SHACK = Clue(2, set(["shack"]), clue_type="structure")
-TWO_FROM_COUGAR = Clue(2, set(["cougar"]), clue_type="animal")
-TWO_FROM_BEAR = Clue(2, set(["bear"]), clue_type="animal")
+TWO_FROM_STANDING_STONE = Clue(2, {"stone"}, clue_type="structure")
+TWO_FROM_ABANDONED_SHACK = Clue(2, {"shack"}, clue_type="structure")
+TWO_FROM_COUGAR = Clue(2, {"cougar"}, clue_type="animal")
+TWO_FROM_BEAR = Clue(2, {"bear"}, clue_type="animal")
 
-THREE_FROM_BLUE = Clue(3, set(["blue"]), clue_type="structure")
-THREE_FROM_WHITE = Clue(3, set(["white"]), clue_type="structure")
-THREE_FROM_GREEN = Clue(3, set(["green"]), clue_type="structure")
-THREE_FROM_BLACK = Clue(3, set(["black"]), clue_type="structure")
+THREE_FROM_BLUE = Clue(3, {"blue"}, clue_type="structure")
+THREE_FROM_WHITE = Clue(3, {"white"}, clue_type="structure")
+THREE_FROM_GREEN = Clue(3, {"green"}, clue_type="structure")
+THREE_FROM_BLACK = Clue(3, {"black"}, clue_type="structure")
 
 # TODO Refactor to contain normal clues and inverted clues differently
 # This will remove the need to remove THREE_FROM_BLACK in multiple locations
 
-CLUE_COLLECTION = set(
-    [
-        FOREST_OR_DESERT,
-        FOREST_OR_WATER,
-        FOREST_OR_SWAMP,
-        FOREST_OR_MOUNTAIN,
-        DESERT_OR_WATER,
-        DESERT_OR_SWAMP,
-        DESERT_OR_MOUNTAIN,
-        WATER_OR_SWAMP,
-        WATER_OR_MOUNTAIN,
-        SWAMP_OR_MOUNTAIN,
-        ONE_FROM_FOREST,
-        ONE_FROM_DESERT,
-        ONE_FROM_SWAMP,
-        ONE_FROM_MOUNTAIN,
-        ONE_FROM_WATER,
-        ONE_FROM_ANIMAL,
-        TWO_FROM_STANDING_STONE,
-        TWO_FROM_ABANDONED_SHACK,
-        TWO_FROM_COUGAR,
-        TWO_FROM_BEAR,
-        THREE_FROM_BLUE,
-        THREE_FROM_WHITE,
-        THREE_FROM_GREEN,
-        THREE_FROM_BLACK,
-    ]
-)
+CLUE_COLLECTION = {
+    FOREST_OR_DESERT,
+    FOREST_OR_WATER,
+    FOREST_OR_SWAMP,
+    FOREST_OR_MOUNTAIN,
+    DESERT_OR_WATER,
+    DESERT_OR_SWAMP,
+    DESERT_OR_MOUNTAIN,
+    WATER_OR_SWAMP,
+    WATER_OR_MOUNTAIN,
+    SWAMP_OR_MOUNTAIN,
+    ONE_FROM_FOREST,
+    ONE_FROM_DESERT,
+    ONE_FROM_SWAMP,
+    ONE_FROM_MOUNTAIN,
+    ONE_FROM_WATER,
+    ONE_FROM_ANIMAL,
+    TWO_FROM_STANDING_STONE,
+    TWO_FROM_ABANDONED_SHACK,
+    TWO_FROM_COUGAR,
+    TWO_FROM_BEAR,
+    THREE_FROM_BLUE,
+    THREE_FROM_WHITE,
+    THREE_FROM_GREEN,
+    THREE_FROM_BLACK,
+}
 
 __CLUE_LOOKUP = {
     "alpha": {

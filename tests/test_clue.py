@@ -150,8 +150,8 @@ class TestAcceptedTiles(unittest.TestCase):
 
 class TestHashing(unittest.TestCase):
     def test_new_objects_evaluate_same_hash(self) -> None:
-        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
-        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        a = Clue(1, {"bear", "cougar"}, clue_type="animal")
+        b = Clue(1, {"bear", "cougar"}, clue_type="animal")
 
         self.assertEqual(
             hash(a),
@@ -160,8 +160,8 @@ class TestHashing(unittest.TestCase):
         )
 
     def test_accepted_tiles_maintains_hash(self) -> None:
-        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
-        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        a = Clue(1, {"bear", "cougar"}, clue_type="animal")
+        b = Clue(1, {"bear", "cougar"}, clue_type="animal")
 
         self.assertEqual(
             hash(a),
@@ -188,8 +188,8 @@ class TestHashing(unittest.TestCase):
         )
 
     def test_set_unpacking_order_does_not_change_hash(self) -> None:
-        a = set(["bear", "cougar"])
-        b = set(["bear", "cougar"])
+        a = {"bear", "cougar"}
+        b = {"bear", "cougar"}
 
         tupled_a = (*a,)
         tupled_b = (*b,)
@@ -198,7 +198,7 @@ class TestHashing(unittest.TestCase):
         _MAX_UNPACK_ATTEMPTS = 1000
 
         while tupled_a != tupled_b:
-            b = set(["bear", "cougar"])
+            b = {"bear", "cougar"}
             tupled_b = (*b,)
 
             i += 1
@@ -220,16 +220,16 @@ class TestEquality(unittest.TestCase):
     def test_different_instances_of_same_clues_evaluate_to_be_same(
         self,
     ) -> None:
-        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
-        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        a = Clue(1, {"bear", "cougar"}, clue_type="animal")
+        b = Clue(1, {"bear", "cougar"}, clue_type="animal")
 
         self.assertEqual(
             a, b, msg="Instances of same clue should evaluate to be equal"
         )
 
     def test_accepted_tiles_comparison(self) -> None:
-        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
-        b = Clue(1, set(["bear", "cougar"]), clue_type="animal")
+        a = Clue(1, {"bear", "cougar"}, clue_type="animal")
+        b = Clue(1, {"bear", "cougar"}, clue_type="animal")
 
         self.assertEqual(
             a, b, msg="Instances of same clue should evaluate to be equal"
@@ -254,8 +254,8 @@ class TestEquality(unittest.TestCase):
         )
 
     def test_set_creation_order_does_not_change_equality(self) -> None:
-        a = Clue(1, set(["bear", "cougar"]), clue_type="animal")
-        b = Clue(1, set(["cougar", "bear"]), clue_type="animal")
+        a = Clue(1, {"bear", "cougar"}, clue_type="animal")
+        b = Clue(1, {"cougar", "bear"}, clue_type="animal")
 
         self.assertEqual(
             a, b, msg="Order of distance_from set should not change equality"
@@ -264,8 +264,8 @@ class TestEquality(unittest.TestCase):
 
 class TestInvertedClue(unittest.TestCase):
     def test_inverting_a_clue_changes_repr(self) -> None:
-        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
-        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+        normal = Clue(0, {"F", "D"}, clue_type="biome", inverted=False)
+        inverted = Clue(0, {"F", "D"}, clue_type="biome", inverted=True)
 
         normal_repr = str(normal)
         inverted_repr = str(inverted)
@@ -277,8 +277,8 @@ class TestInvertedClue(unittest.TestCase):
         )
 
     def test_inverting_a_clue_changes_hash(self) -> None:
-        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
-        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+        normal = Clue(0, {"F", "D"}, clue_type="biome", inverted=False)
+        inverted = Clue(0, {"F", "D"}, clue_type="biome", inverted=True)
 
         normal_repr = hash(normal)
         inverted_repr = hash(inverted)
@@ -290,8 +290,8 @@ class TestInvertedClue(unittest.TestCase):
         )
 
     def test_inverted_is_unequal_to_noninverted(self) -> None:
-        normal = Clue(0, set(["F", "D"]), clue_type="biome", inverted=False)
-        inverted = Clue(0, set(["F", "D"]), clue_type="biome", inverted=True)
+        normal = Clue(0, {"F", "D"}, clue_type="biome", inverted=False)
+        inverted = Clue(0, {"F", "D"}, clue_type="biome", inverted=True)
 
         self.assertNotEqual(
             normal,
