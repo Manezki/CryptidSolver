@@ -24,12 +24,11 @@ class Player:
     ) -> frozenset[Clue]:
         possible_clues = set()
 
-        if inverted_clues:  # pylint: disable=no-else-raise
+        if inverted_clues:
             raise NotImplementedError(
                 "Missing implementation for inverted clues"
             )
-        else:
-            clues = CLUE_COLLECTION.difference({THREE_FROM_BLACK})
+        clues = CLUE_COLLECTION.difference({THREE_FROM_BLACK})
 
         for clue in clues:
             # Clue is possible only if it accepts all disk locations and refuses all cube locations
