@@ -106,7 +106,7 @@ class Map:
         Construct the gamemap using the map pieces ({number}{south/north})
 
         Args:
-            description (List[str]): Map pieces (num, heading) in an ordered list
+            map_description (List[str]): Map pieces (num, heading) in an ordered list
                                     (Starting from top-left to bottom-left,
                                     continue top-right to bottom-right).
             structures (List[Structures]): Map structures to be added to the map.
@@ -210,7 +210,7 @@ class Map:
         Form a map from map pieces.
 
         Args:
-            description (list): Map pieces (num, heading) in an ordered list. Left column first from top down.
+            description (List[str]): Map pieces (num, heading) in an ordered list. Left column first from top down.
             structures (List[Structure]): Map structures to be added to the map.
 
         Returns:

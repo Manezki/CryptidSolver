@@ -113,11 +113,10 @@ class Game:
         Infer possible tiles from the clue possible clue combinations.
 
         Args:
-            gamemap: Map - Current gamemap.
-            players: List[Player] - List of players.
+            inverted_clues (bool): Whether the game is played with inverted clues.
 
         Returns:
-            Dict[MapTile: int]] - MapTile with number of clue combinations pointing on them
+            Dict[MapTile: float]] - MapTile with number of clue combinations pointing on them
         """
 
         if inverted_clues:

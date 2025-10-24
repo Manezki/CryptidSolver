@@ -16,7 +16,7 @@ def possible_clues_for_player(
     Args:
         gamemap (Map): Current gamemap.
         player (Player): Player, for whom to infer the clues.
-        inverted_clues (bool, optional): Should inverted clues be considered. Defaults to False.
+        inverted_clues (bool): Should inverted clues be considered. Defaults to False.
 
     Returns:
         FrozenSet[Clue]: Set of Clues that are possible for the player
@@ -37,7 +37,7 @@ def possible_clues_after_cube_placement(
         gamemap (Map): Current gamemap.
         player (Player): Player for whom the cube would be placed.
         placement (Tuple[int, int]): cube placement location
-        inverted_clues (bool, optional): Should inverted clues be considered. Defaults to False.
+        inverted_clues (bool): Should inverted clues be considered. Defaults to False.
 
     Returns:
         FrozenSet[Clue]: Set of Clues that would remain possible after cube placement.
@@ -64,7 +64,7 @@ def possible_clues_after_disk_placement(
         gamemap (Map): Current gamemap.
         player (Player): Player for whom the disk would be placed.
         placement (Tuple[int, int]): Disk placement location
-        inverted_clues (bool, optional): Should inverted clues be considered. Defaults to False.
+        inverted_clues (bool): Should inverted clues be considered. Defaults to False.
 
     Returns:
         FrozenSet[Clue]: Set of Clues that would remain possible after disk placement.
@@ -89,7 +89,7 @@ def possible_tiles(
         inverted_clues: bool - Playing with inverted clue?
 
     Returns:
-        Dict[MapTile: int]] - MapTile with number of clue combinations pointing on them
+        Dict[MapTile: float]] - MapTile with number of clue combinations pointing on them
     """
 
     return game.possible_tiles(inverted_clues)
