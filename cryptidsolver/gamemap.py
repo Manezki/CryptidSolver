@@ -125,7 +125,7 @@ class Map:
         self.map = self._generate_terrain_map(map_description, structures)
 
     @staticmethod
-    def neighbouring_coordinates(x: int, y: int) -> frozenset:
+    def neighbouring_coordinates(x: int, y: int) -> frozenset[tuple[int, int]]:
         """
         Returns the surrounding coordinates to tile at x,y.
 
@@ -151,7 +151,7 @@ class Map:
 
         return frozenset(neighbours)
 
-    def tiles_on_distance(self, x: int, y: int, d: int) -> frozenset:
+    def tiles_on_distance(self, x: int, y: int, d: int) -> frozenset[MapTile]:
         """
         Returns tiles within distance d of tile x,y.
 
