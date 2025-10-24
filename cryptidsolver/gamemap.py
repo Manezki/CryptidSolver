@@ -106,10 +106,10 @@ class Map:
         Construct the gamemap using the map pieces ({number}{south/north})
 
         Args:
-            map_description (List[str]): Map pieces (num, heading) in an ordered list
-                                    (Starting from top-left to bottom-left,
-                                    continue top-right to bottom-right).
-            structures (List[Structures]): Map structures to be added to the map.
+            map_description: Map pieces (num, heading) in an ordered list
+                (Starting from top-left to bottom-left, continue top-right
+                to bottom-right).
+            structures: Map structures to be added to the map.
         """
 
         assert (
@@ -130,11 +130,11 @@ class Map:
         Returns the surrounding coordinates to tile at x,y.
 
         Args:
-            x (int): x coordinate - left-most column being 1
-            y (int): y coordinate - top-most row being 1
+            x: x coordinate - left-most column being 1
+            y: y coordinate - top-most row being 1
 
         Returns:
-            FrozenSet: Tiles surrounding x,y
+            Tiles surrounding x,y
         """
         neighbours = set()
 
@@ -156,12 +156,12 @@ class Map:
         Returns tiles within distance d of tile x,y.
 
         Args:
-            x (int): x coordinate - left-most column being 1
-            y (int): y coordinate - top-most row being 1
-            d (int): distance from tile
+            x: x coordinate - left-most column being 1
+            y: y coordinate - top-most row being 1
+            d: distance from tile
 
         Returns:
-            FrozenSet: Tiles within distance d from tile x,y
+            Tiles within distance d from tile x,y
         """
 
         neighbours = set()
@@ -186,10 +186,10 @@ class Map:
         Generate a new MapPiece that is reversed (rotated 180*) from given map piece.
 
         Args:
-            map_piece (List[List[_BiomeTile]]): Map piece to be reversed.
+            map_piece: Map piece to be reversed.
 
         Returns:
-            List[List[_BiomeTile]]: Reversed map piece
+            Reversed map piece
         """
 
         reversed_piece = []
@@ -210,11 +210,11 @@ class Map:
         Form a map from map pieces.
 
         Args:
-            description (List[str]): Map pieces (num, heading) in an ordered list. Left column first from top down.
-            structures (List[Structure]): Map structures to be added to the map.
+            description: Map pieces (num, heading) in an ordered list. Left column first from top down.
+            structures: Map structures to be added to the map.
 
         Returns:
-            List[List[MapTile]]: Fullsize matrix of Tile-objects describing the game map.
+            Fullsize matrix of Tile-objects describing the game map.
         """
 
         lookup_mapPiece = {

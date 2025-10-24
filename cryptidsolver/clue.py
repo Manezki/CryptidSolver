@@ -22,10 +22,10 @@ class Clue:
         Construct a game clue
 
         Args:
-            distance (int): Distance mentioned on clue. For 'on X', use 0.
-            distance_from (Set[str]): Distance from what
-            clue_type (str): Type of clue biome/animal/structure. Defaults to "biome".
-            inverted (bool, optional): Is the clue inverted, i.e. 'not X'. Defaults to False.
+            distance: Distance mentioned on clue. For 'on X', use 0.
+            distance_from: Distance from what
+            clue_type: Type of clue biome/animal/structure.
+            inverted: Is the clue inverted, i.e. 'not X'.
         """
 
         self.distance = distance
@@ -74,10 +74,10 @@ class Clue:
         Infer which tiles are possible for given clue
 
         Args:
-            gamemap (Map): Current gamemap
+            gamemap: Current gamemap
 
         Returns:
-            FrozenSet[MapTile]: Tiles that are possible according to the clue
+            Tiles that are possible according to the clue
         """
 
         accepted_tiles = set()
