@@ -1,8 +1,7 @@
 import unittest
 
 from cryptidsolver.constant import clues
-from cryptidsolver.game import Game
-from cryptidsolver.gamemap import Structure
+from cryptidsolver.gamemap import Map, Structure
 from cryptidsolver.player import Player
 
 MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
@@ -17,32 +16,25 @@ STRUCTURES = [
 
 
 class TestPossibleClues(unittest.TestCase):
-    def setUp(self) -> None:
-        # Redefine for every test as state persists otherwise
-        player_1 = Player(
-            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
-
-        players = [player_1, player_2, player_3]
-
-        self.game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
-
     def test_returns_non_empty_collection(self) -> None:
         self.assertTrue(
-            len(self.game.players[0].possible_clues(self.game.map)) != 0,
+            len(
+                Player(
+                    "orange", clues.WATER_OR_MOUNTAIN, teamname="alpha"
+                ).possible_clues(Map(MAP_DESCRIPTOR, STRUCTURES))
+            )
+            != 0,
             msg="Should always return non-empty collection",
         )
 
     def test_defaults_to_return_all_clues(self) -> None:
-        # player_2 does not have a clue assigned
-        player = self.game.players[1]
+        # We don't know anything about the players clue
+        player = Player("cyan", None, teamname="beta")
 
         original_collection = clues.CLUE_COLLECTION.difference(
             {clues.THREE_FROM_BLACK}
         )
-        possible_clues = player.possible_clues(self.game.map)
+        possible_clues = player.possible_clues(Map(MAP_DESCRIPTOR, STRUCTURES))
 
         self.assertSetEqual(
             original_collection,
@@ -51,11 +43,13 @@ class TestPossibleClues(unittest.TestCase):
         )
 
     def test_cubes_limit_possibile_clues(self) -> None:
+        player = Player(
+            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
+        )
         # Place a cube for the 1st player
-        self.game.place_cube(1, 1)
-        player = self.game.players[0]
+        player.cubes.append((1, 1))
 
-        possible_clues = player.possible_clues(self.game.map)
+        possible_clues = player.possible_clues(Map(MAP_DESCRIPTOR, STRUCTURES))
 
         # Cube on (1, 1) excludes the following clues:
         # 2 from cougar, 1 from animal, swamp, 1 from swamp

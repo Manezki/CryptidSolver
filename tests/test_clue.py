@@ -3,8 +3,7 @@ from copy import deepcopy
 
 from cryptidsolver.clue import Clue
 from cryptidsolver.constant import clues
-from cryptidsolver.game import Game
-from cryptidsolver.player import Player
+from cryptidsolver.gamemap import Map
 from cryptidsolver.structure import Structure
 
 MAP_DESCRIPTOR = ["3N", "1S", "5S", "4S", "2N", "6S"]
@@ -20,14 +19,8 @@ STRUCTURES = [
 
 class TestAcceptedTiles(unittest.TestCase):
     def setUp(self) -> None:
-        self.game = Game(
+        self.map = Map(
             ["6N", "5S", "2N", "3N", "4N", "1S"],
-            [
-                Player("Red", clue=clues.FOREST_OR_MOUNTAIN),
-                Player("Green"),
-                Player("Brown"),
-                Player("Purple"),
-            ],
             [
                 Structure("Blue", "Shack", x=1, y=7),
                 Structure("Blue", "Stone", x=8, y=3),
@@ -87,18 +80,13 @@ class TestAcceptedTiles(unittest.TestCase):
     def test_accepted_tiles_does_not_contain_tile_refused_by_the_clue(
         self,
     ) -> None:
-        accepted_tiles = clues.FOREST_OR_MOUNTAIN.accepted_tiles(self.game.map)
+        accepted_tiles = clues.FOREST_OR_MOUNTAIN.accepted_tiles(self.map)
 
-        # Self.game.map has desert with bear on 1,1
-        self.assertNotIn(self.game.map[1, 1], accepted_tiles)
+        # Self.map has desert with bear on 1,1
+        self.assertNotIn(self.map[1, 1], accepted_tiles)
 
     def test_accepted_tiles_have_matching_coordinates(self) -> None:
-        if self.game.players[0].clue is None:
-            self.fail("Test requires player 1 to have a clue defined")
-
-        accepted_tiles = self.game.players[0].clue.accepted_tiles(
-            self.game.map
-        )
+        accepted_tiles = clues.FOREST_OR_MOUNTAIN.accepted_tiles(self.map)
 
         for tile in accepted_tiles:
             self.assertIn(
@@ -112,40 +100,24 @@ class TestAcceptedTiles(unittest.TestCase):
 
     def test_cougar_clue_accepts_tile_next_to_cougar_zone(self) -> None:
         # Encountered during manual testing
-
-        player_1 = Player(
-            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
-
-        players = [player_1, player_2, player_3]
-
-        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
+        map = Map(MAP_DESCRIPTOR, STRUCTURES)
 
         self.assertIn(
-            game.map[1, 1],
-            clues.TWO_FROM_COUGAR.accepted_tiles(game.map),
+            map[1, 1],
+            deepcopy(clues.TWO_FROM_COUGAR).accepted_tiles(map),
             msg="2 from cougar should accept tile next to cougar zone",
         )
 
     def test_repeated_calls_are_cached(self) -> None:
         two_from_cougar = deepcopy(clues.TWO_FROM_COUGAR)
 
-        player_1 = Player(
-            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
+        map = Map(MAP_DESCRIPTOR, STRUCTURES)
 
-        players = [player_1, player_2, player_3]
-        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
-
-        _ = two_from_cougar.accepted_tiles(game.map)
+        _ = two_from_cougar.accepted_tiles(map)
 
         before_call = two_from_cougar.accepted_tiles.cache_info()
 
-        _ = two_from_cougar.accepted_tiles(game.map)
+        _ = two_from_cougar.accepted_tiles(map)
 
         after_call = two_from_cougar.accepted_tiles.cache_info()
 
@@ -177,17 +149,9 @@ class TestHashing(unittest.TestCase):
             msg="Fresh clues with same parameters should be comparable",
         )
 
-        player_1 = Player(
-            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
+        map = Map(MAP_DESCRIPTOR, STRUCTURES)
 
-        players = [player_1, player_2, player_3]
-
-        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
-
-        _ = b.accepted_tiles(game.map)
+        _ = b.accepted_tiles(map)
 
         self.assertEqual(
             hash(a),
@@ -243,17 +207,9 @@ class TestEquality(unittest.TestCase):
             a, b, msg="Instances of same clue should evaluate to be equal"
         )
 
-        player_1 = Player(
-            "orange", clues.by_booklet_entry("alpha", 2), teamname="alpha"
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
+        map = Map(MAP_DESCRIPTOR, STRUCTURES)
 
-        players = [player_1, player_2, player_3]
-
-        game = Game(MAP_DESCRIPTOR, players, STRUCTURES)
-
-        _ = b.accepted_tiles(game.map)
+        _ = b.accepted_tiles(map)
 
         self.assertEqual(
             a,
@@ -308,17 +264,8 @@ class TestInvertedClue(unittest.TestCase):
         )
 
     def test_inverted_clue_rejects_associated_tiles(self) -> None:
-        player_1 = Player(
-            "red",
-            Clue(1, {"S"}, clue_type="biome", inverted=True),
-            teamname="alpha",
-        )
-        player_2 = Player("cyan", None, teamname="beta")
-        player_3 = Player("purple", None, teamname="epsilon")
-
-        game = Game(
+        map = Map(
             ["4N", "3N", "6S", "1S", "5S", "2S"],
-            [player_1, player_2, player_3],
             [
                 Structure("black", "stone", 2, 3),
                 Structure("green", "shack", 4, 1),
@@ -336,8 +283,8 @@ class TestInvertedClue(unittest.TestCase):
         )
 
         self.assertNotIn(
-            game.map[1, 3],
-            inverted_one_from_swamp_clue.accepted_tiles(game.map),
+            map[1, 3],
+            inverted_one_from_swamp_clue.accepted_tiles(map),
             msg="'Not 1 from swamp' should reject tile next to swamp",
         )
 
