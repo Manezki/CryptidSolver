@@ -2,6 +2,8 @@
 
 A solver for the boardgame [Cryptid](https://ospreypublishing.com/store/osprey-games/board-card-games/cryptid?___store=osprey_rst). Currently this solver supports interactive mode (Helping to find good moves), but extending it to simulated games should not be too much trouble. With simulated games different gameplay styles could be analysed and compared (e.g. accounting for unknown information in decision making).
 
+> This repository is alpha stage. Expect breaking changes when minor-version changes.
+
 ## Running the solver in interactive mode
 
 To use the solver you will need a copy of the [Cryptid boardgame](https://ospreypublishing.com/store/osprey-games/board-card-games/cryptid?___store=osprey_rst). Installation of [Python](https://www.python.org/) is also required.
