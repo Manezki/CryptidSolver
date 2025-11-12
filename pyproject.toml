@@ -18,7 +18,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "mypy==1.14.1",
-    "pylint==3.2.7",
+    "pylint==4.0.2",
     "tox==4.25.0",
     "pytest==9.0.1",
     "ruff==0.13.2"
