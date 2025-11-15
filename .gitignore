@@ -146,7 +146,7 @@ dmypy.json
 cython_debug/
 
 # VsCode configurations
-.vscode/tasks.json
+.vscode/
 
 # Zed configurations
 .zed/
